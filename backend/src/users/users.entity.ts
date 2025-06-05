@@ -45,5 +45,5 @@ export class User {
     @Column({
         default: Date.now()
     })
-    createdAt: Timestamp
+    createdAt: Date
 }
