@@ -17,7 +17,7 @@ const { products } = useProducts();
   return (
     <Container sx={{ py: 6 }}>
       <Typography variant="h3" align="center" gutterBottom fontWeight="bold">
-        Welcome to Parfume Store
+        Matan Parfumerie
       </Typography>
       <Typography variant="h6" align="center" color="text.secondary" mb={5}>
         Discover our exclusive collection of fragrances
