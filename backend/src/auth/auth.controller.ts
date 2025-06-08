@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Request } from
 import { userAuth } from 'src/utils/DTO/userAuth';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/users/users.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -11,8 +12,10 @@ export class AuthController {
 
     @UseGuards(AuthGuard('local'))
     @Post('login')
-    async login(@Request() req) {
-        return this.authService.login(req.user);
+    async login(@Request() req: {user: User}) {//TODO:: pipe or validator
+        console.log(req);
+        
+        return this.authService.login(user);
     }
 
     @UseGuards(AuthGuard('local'))
