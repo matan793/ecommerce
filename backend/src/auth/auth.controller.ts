@@ -12,9 +12,9 @@ export class AuthController {
 
     @UseGuards(AuthGuard('local'))
     @Post('login')
-    async login(@Request() req: {user: User}) {//TODO:: pipe or validator
-        console.log(req);
+    async login(@Request() { user }: { user: User }) {
         
+
         return this.authService.login(user);
     }
 
