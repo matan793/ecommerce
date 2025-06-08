@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-    <HomePage />
+    <LoginPage />
     {/* <ParfumeCard brand='mirav' imageUrl='https://pplx-res.cloudinary.com/image/upload/v1749401215/gpt4o_images/tnraydhz7v87fbjyu1s0.png' name='miravzona' price={1} /> */}
     </>
   )
