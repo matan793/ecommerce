@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, Not, Repository } from 'typeorm';
 import { userAuth } from 'src/utils/DTO/userAuth';
 import * as bcrypt from 'bcrypt';
 @Injectable()
@@ -19,6 +19,13 @@ export class UsersService {
         }
 
         return null;
+    }
+    async findById(id: number): Promise<User> {
+        const user = await this.userRepository.findOne({ where: { userId: id } });
+        if (!user) {
+            throw new NotFoundException(`User with ID ${id} not found`);
+        }
+        return user;
     }
 
     async create(user: DeepPartial<User>): Promise<User> {

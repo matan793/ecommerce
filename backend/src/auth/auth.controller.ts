@@ -1,10 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Request, Res, } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Request, Res, Get, } from '@nestjs/common';
 import { userAuth } from 'src/utils/DTO/userAuth';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/users/users.entity';
 import { Response } from 'express';
 import { UsersService } from 'src/users/users.service';
+
 
 @Controller('auth')
 export class AuthController {
@@ -15,6 +16,7 @@ export class AuthController {
 
     @UseGuards(AuthGuard('local'))
     @Post('login')
+    @HttpCode(HttpStatus.OK)
     async login(@Request() { user }: { user: User }, @Res({ passthrough: true }) response: Response) {
 
         response.cookie('access_token', (await this.authService.login(user)).access_token, {
@@ -27,7 +29,7 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard('local'))
-    @Post('auth/logout')
+    @Post('logout')
     async logout(@Res({ passthrough: true }) response: Response) {
         response.cookie('access_token', '', {
             httpOnly: true,
@@ -36,6 +38,15 @@ export class AuthController {
             expires: new Date(0)
         });
         return { message: 'Logout successful' };
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('/user')
+    @HttpCode(HttpStatus.OK)
+    async getUser(@Request() { user }: { user: User }) {
+
+        const { role: __, password: _, ...safeUser } = await this.userService.findById(user.userId);
+        return safeUser;
     }
 
     @Post('register')
@@ -48,7 +59,7 @@ export class AuthController {
         }
         const newUser = await this.userService.create(userAuth);
         console.log(newUser);
-        
+
         response.cookie('access_token', (await this.authService.login(newUser)).access_token, {
             httpOnly: true,
             secure: true,

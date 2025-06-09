@@ -21,12 +21,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    console.log('JWT Payload:', payload);
+    
     return { userId: payload.sub };
   }
 
   private static extractJWT(req: Request): string | null {
-    if (req.cookies && 'user_token' in req.cookies && req.cookies.user_token.length > 0) {
-      return req.cookies.user_token;
+    console.log(req.cookies.access_token)
+    if (req.cookies && 'access_token' in req.cookies && req.cookies.access_token.length > 0) {
+      return req.cookies.access_token;
     }
     return null;
   }

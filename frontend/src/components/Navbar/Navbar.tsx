@@ -2,14 +2,13 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, FormGroup, FormControlLabel, Menu, MenuItem, Switch,  } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useUser } from '../../contexts';
 
 const Navbar: React.FC = () => {
-    const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAuth(event.target.checked);
-    };
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const {user} = useUser();
+
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -47,7 +46,7 @@ const Navbar: React.FC = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Photos
                     </Typography>
-                    {auth && (
+                    {user && (
                         <div>
                             <IconButton
                                 size="large"
@@ -78,6 +77,13 @@ const Navbar: React.FC = () => {
                                 <MenuItem onClick={handleClose}>My account</MenuItem>
                             </Menu>
                         </div>
+                    )}
+                    {!user && (
+                        <Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>
+                            <Button color="inherit" href="/login">
+                                Login
+                            </Button>
+                        </Typography>
                     )}
                 </Toolbar>
             </AppBar>

@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { apiClient } from '../../api/api';
+import { useUser } from '../../contexts';
+import { useNavigate } from 'react-router';
+
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+    const {user, setUser} = useUser()
+    const navigate = useNavigate();
     const handleLogin = async () => {
         try {
             const response = await apiClient.post('/auth/login', { email, password });
-
-            console.log(response.data); // Should say "Login successful"
+            if (response.status === 200) {
+                const userData = response.data;
+                setUser(userData);
+                console.log('Login successful:', userData);
+                navigate('/'); // Redirect to home page after successful login
+                // Redirect or perform any other action after successful login
+            } else {
+                console.error('Login failed:', response.statusText);
+            }
         } catch (err) {
             console.error('Login failed:', err);
         }
