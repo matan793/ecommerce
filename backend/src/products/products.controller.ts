@@ -8,7 +8,7 @@ export class ProductsController {
         private productService: ProductsService
     ) {}
 
-    //@UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async all(){
         return await this.productService.getAll() 
