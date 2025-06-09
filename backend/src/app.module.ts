@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -22,7 +23,8 @@ import { UsersModule } from './users/users.module';
   }),
     ProductsModule,
     AuthModule,
-    UsersModule],
+    UsersModule,
+    BrandsModule],
   //controllers: [AppController],
   providers: [AppService],
 })

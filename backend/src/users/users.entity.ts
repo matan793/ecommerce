@@ -1,9 +1,9 @@
 import { userRoles } from "src/utils/userRoles";
-import { Column, Entity, PrimaryColumn, Timestamp } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('users')
 export class User {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     userId: number;
 
     @Column({

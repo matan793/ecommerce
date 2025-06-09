@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { apiClient } from '../../api/api';
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    
+    const handleLogin = async () => {
+        try {
+            const response = await apiClient.post('/auth/login', { email, password });
 
+            console.log(response.data); // Should say "Login successful"
+        } catch (err) {
+            console.error('Login failed:', err);
+        }
+    };
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Add login logic here
-        alert(`Logging in as ${email}`);
+        handleLogin();
     };
 
     return (
