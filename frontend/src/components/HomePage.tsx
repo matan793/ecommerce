@@ -4,39 +4,54 @@ import ParfumeCard from './parfumeCard/parfumeCard';
 import { useProducts } from '../hooks/useProducts';
 import banner from '../assets/banner.png';
 import Navbar from './Navbar/Navbar';
+import ProductsGrid from './productsGrid/ProductsGrid';
 
-interface Product {
-  name: string;
-  brand: string;
-  price: number;
-  imageUrl: string;
-}
 
 const HomePage: React.FC = () => {
   const { products } = useProducts();
   
-
+  // Golden banner styles
+  const bannerStyle: React.CSSProperties = {
+    width: '100%',
+    height: '180px',
+    background: 'linear-gradient(90deg, #fddfa1 0%, #FFF8DC 100%)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '32px',
+    borderRadius: '16px',
+    boxShadow: '0 4px 24px rgba(255, 215, 0, 0.2)',
+    overflow: 'hidden'
+  };
 
 
   return (
-   <><Navbar></Navbar>
+    <>
+  <Navbar />
+  <div style={{ ...bannerStyle, height: '270px', paddingLeft: 40, paddingRight: 40, justifyContent: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <img
+        src="/logo.png"
+        alt="Logo"
+        style={{
+          height: 240,
+          marginRight: 56,
+          filter: 'drop-shadow(0 4px 16px rgba(218,165,32,0.25))',
+        }}
+      />
+      <div>
+        <Typography variant="h2" align="center" fontWeight="bold" color="#6d4c00">
+          Matan Parfumerie
+        </Typography>
+        <Typography variant="h5" align="center" color="#7c6f57">
+          Discover our exclusive collection of fragrances
+        </Typography>
+      </div>
+    </div>
+  </div>
     <Container sx={{ py: 6 }}>
-      <Typography variant="h3" align="center" gutterBottom fontWeight="bold">
-        Matan Parfumerie
-      </Typography>
-      <Typography variant="h6" align="center" color="text.secondary" mb={5}>
-        Discover our exclusive collection of fragrances 
-      </Typography>
       <Grid container spacing={4} justifyContent="center">
-        {products.map((parfume: Product, idx) => (
-          <Grid key={idx}>
-            <ParfumeCard
-              name={parfume.name}
-              brand={parfume.brand}
-              price={parfume.price}
-              imageUrl={parfume.imageUrl} />
-          </Grid>
-        ))}
+        <ProductsGrid products={products} />
       </Grid>
     </Container></>
   );

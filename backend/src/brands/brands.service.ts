@@ -9,6 +9,7 @@ export class BrandsService {
     private brandRepository: Repository<Brand>) { }
 
     async findAll(): Promise<Brand[]> {
-        return await this.brandRepository.find();
+        return await this.brandRepository.find({
+            relations: ['products']});
     }
 }

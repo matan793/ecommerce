@@ -34,6 +34,12 @@ CREATE TYPE ecommerce.user_role AS ENUM(
 'admin'
 );
 
+CREATE TYPE ecommerce.gender as ENUM(
+'male',
+'female',
+'unisex'
+);
+
 CREATE TABLE ecommerce.users(
 	user_id SERIAL PRIMARY KEY,
 	first_name TEXT NOT NULL,
@@ -74,6 +80,7 @@ CREATE TABLE ecommerce.products (
     description TEXT,
 	brand_id INTEGER REFERENCES ecommerce.brands(brand_id) ON DELETE CASCADE,
     price NUMERIC(10, 2) NOT NULL,
+	gender ecommerce.gender NOT NULL DEFAULT 'unisex',
 	image_url TEXT,
     stock_quantity INTEGER NOT NULL,
     category_id INTEGER REFERENCES ecommerce.categories(category_id)
@@ -89,7 +96,7 @@ CREATE TABLE ecommerce.orders (
 );
 
 CREATE TABLE ecommerce.order_items (
-    _id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     order_id INTEGER REFERENCES ecommerce.orders(order_id) ON DELETE CASCADE,
     product_id INTEGER REFERENCES ecommerce.products(product_id),
     quantity INTEGER NOT NULL,
@@ -124,51 +131,52 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 -- USERS
 INSERT INTO ecommerce.users (user_id, first_name, last_name, birthdate, email, password, role, phone_number, created_at) VALUES
-(1, 'Alice', 'Johnson', '1990-05-12', 'alice.johnson@example.com', 'hashed_password1', 'user', '1234567890', '2023-06-01'),
-(2, 'Bob', 'Smith', '1985-03-23', 'bob.smith@example.com', 'hashed_password2', 'user', '0987654321', '2023-06-02');
+(default, 'Alice', 'Johnson', '1990-05-12', 'alice.johnson@example.com', 'hashed_password1', 'user', '1234567890', '2023-06-01'),
+(default, 'Bob', 'Smith', '1985-03-23', 'bob.smith@example.com', 'hashed_password2', 'user', '0987654321', '2023-06-02');
 
 -- ADDRESSES
 INSERT INTO ecommerce.addresses (address_id, user_id, name, street, city, country, postal_code) VALUES
-(1, 1, 'Alice Home', '123 Main St', 'New York', 'USA', '10001'),
-(2, 2, 'Bob Office', '456 Elm St', 'Los Angeles', 'USA', '90001');
+(default, 1, 'Alice Home', '123 Main St', 'New York', 'USA', '10001'),
+(default, 2, 'Bob Office', '456 Elm St', 'Los Angeles', 'USA', '90001');
 
 -- CATEGORIES
 INSERT INTO ecommerce.categories (category_id, name, description) VALUES
-(1, 'Men''s Fragrances', 'Perfumes and colognes for men'),
-(2, 'Women''s Fragrances', 'Perfumes and colognes for women'),
-(3, 'Unisex Fragrances', 'Fragrances suitable for all genders');
+(default, 'Fruity', 'Apple, peach, berries, tropical fruits Often blended with florals for sweetness'),
+(default, 'Citrus', 'Lemon, bergamot, orange, mandarin, Fresh, zesty, light — often unisex'),
+(default, 'Woody', 'Sandalwood, cedarwood, vetiver, patchouli'),
+(default, 'Spicy', 'Cinnamon, cardamom, pepper, clove. Can be warm or sharp; often in fall/winter scents');
 
 -- BRANDS
 INSERT INTO ecommerce.brands (brand_id, name, description) VALUES
-(1, 'Dior', 'Christian Dior is a luxury fashion house known for iconic fragrances.'),
-(2, 'Chanel', 'Chanel is a French luxury brand with legendary perfumes.'),
-(3, 'Creed', 'Creed is a niche perfume house with historic roots.'),
-(4, 'Yves Saint Laurent', 'YSL creates fashion-forward fragrances.'),
-(5, 'Tom Ford', 'Tom Ford designs luxurious, bold scents.');
+(default, 'Dior', 'Christian Dior is a luxury fashion house known for iconic fragrances.'),
+(default, 'Chanel', 'Chanel is a French luxury brand with legendary perfumes.'),
+(default, 'Creed', 'Creed is a niche perfume house with historic roots.'),
+(default, 'Yves Saint Laurent', 'YSL creates fashion-forward fragrances.'),
+(default, 'Tom Ford', 'Tom Ford designs luxurious, bold scents.');
 
 -- PRODUCTS
 INSERT INTO ecommerce.products (product_id, name, description, brand_id, price, image_url, stock_quantity, category_id) VALUES
-(1, 'Dior Sauvage', 'Fresh, spicy and woody fragrance for men.', 1, 110.00, 'https://parisgallery.ae/cdn/shop/products/214733926_IN.jpg', 50, 1),
-(2, 'Chanel No. 5', 'Classic floral fragrance for women.', 2, 130.00, 'https://www.chanel.com/images//t_one//w_0.51,h_0.51,c_crop/q_auto:good,f_autoplus,fl_lossy,dpr_1.1/w_1020/n-5-eau-de-parfum-spray-3-4fl-oz--packshot-default-125530-9564912943134.jpg', 40, 2),
-(3, 'Creed Aventus', 'Fruity, smoky fragrance for men.', 3, 345.00, 'https://glam42.co.il/cdn/shop/products/creed-aventus-edp-100ml-21435502526618.jpg', 20, 1),
-(4, 'YSL Black Opium', 'Sweet, coffee-flavored women’s perfume.', 4, 125.00, 'https://img.ksp.co.il/item/41848/b_5.jpg', 35, 2),
-(5, 'Tom Ford Oud Wood', 'Rich, woody unisex fragrance.', 5, 250.00, 'https://kolboyehuda.co.il/wp-content/uploads/2021/11/1229-bwsm-ywnysqs-twm-pwrd-wd-wwd-dp-50-ml-Tom-Ford-Oud-Wood-Eau-De-Parfum-50-Ml.jpg', 30, 3);
+(default, 'Dior Sauvage', 'Fresh, spicy and woody fragrance for men.', 1, 110.00, 'https://parisgallery.ae/cdn/shop/products/214733926_IN.jpg', 50, 1),
+(default, 'Chanel No. 5', 'Classic floral fragrance for women.', 2, 130.00, 'https://www.chanel.com/images//t_one//w_0.51,h_0.51,c_crop/q_auto:good,f_autoplus,fl_lossy,dpr_1.1/w_1020/n-5-eau-de-parfum-spray-3-4fl-oz--packshot-default-125530-9564912943134.jpg', 40, 2),
+(default, 'Creed Aventus', 'Fruity, smoky fragrance for men.', 3, 345.00, 'https://glam42.co.il/cdn/shop/products/creed-aventus-edp-100ml-21435502526618.jpg', 20, 1),
+(default, 'YSL Black Opium', 'Sweet, coffee-flavored women’s perfume.', 4, 125.00, 'https://img.ksp.co.il/item/41848/b_5.jpg', 35, 2),
+(default, 'Tom Ford Oud Wood', 'Rich, woody unisex fragrance.', 5, 250.00, 'https://kolboyehuda.co.il/wp-content/uploads/2021/11/1229-bwsm-ywnysqs-twm-pwrd-wd-wwd-dp-50-ml-Tom-Ford-Oud-Wood-Eau-De-Parfum-50-Ml.jpg', 30, 3);
 
 -- ORDERS
 INSERT INTO ecommerce.orders (order_id, user_id, address_id, status, total_amount, created_at) VALUES
-(1, 1, 1, 'delivered', 110.00, '2023-06-03'),
-(2, 2, 2, 'processing', 375.00, '2023-06-04');
+(default, 1, 1, 'delivered', 110.00, '2023-06-03'),
+(default, 2, 2, 'processing', 375.00, '2023-06-04');
 
 -- ORDER ITEMS
-INSERT INTO ecommerce.order_items (_id, order_id, product_id, quantity, unit_price) VALUES
-(1, 1, 1, 1, 110.00),
-(2, 2, 3, 1, 345.00),
-(3, 2, 4, 1, 125.00);
+INSERT INTO ecommerce.order_items (id, order_id, product_id, quantity, unit_price) VALUES
+(default, 1, 1, 1, 110.00),
+(default, 2, 3, 1, 345.00),
+(default, 2, 4, 1, 125.00);
 
 -- PAYMENTS
 INSERT INTO ecommerce.payments (payment_id, order_id, payment_method, payment_status, amount, pa_id_at) VALUES
-(1, 1, 'credit_card', 'approved', 110.00, '2023-06-03'),
-(2, 2, 'paypal', 'pending', 375.00, NULL);
+(default, 1, 'credit_card', 'approved', 110.00, '2023-06-03'),
+(default, 2, 'paypal', 'pending', 375.00, NULL);
 
 -- CART
 INSERT INTO ecommerce.cart (user_id, product_id, quantity) VALUES
@@ -177,5 +185,7 @@ INSERT INTO ecommerce.cart (user_id, product_id, quantity) VALUES
 
 -- REVIEWS
 INSERT INTO ecommerce.reviews (review_id, user_id, product_id, rating, comment, created_at) VALUES
-(1, 1, 1, 5, 'Amazing fragrance, long-lasting!', '2023-06-05'),
-(2, 2, 3, 4, 'Smells great but a bit pricey.', '2023-06-06');
+(default, 1, 1, 5, 'Amazing fragrance, long-lasting!', '2023-06-05'),
+(default, 2, 3, 4, 'Smells great but a bit pricey.', '2023-06-06');
+
+-- SELECT setval('ecommerce.users_user_id_seq', (SELECT MAX(user_id) FROM ecommerce.users));

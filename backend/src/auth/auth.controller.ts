@@ -28,8 +28,9 @@ export class AuthController {
         return user;
     }
 
-    @UseGuards(AuthGuard('local'))
+    @UseGuards(AuthGuard('jwt'))
     @Post('logout')
+    @HttpCode(HttpStatus.OK)
     async logout(@Res({ passthrough: true }) response: Response) {
         response.cookie('access_token', '', {
             httpOnly: true,

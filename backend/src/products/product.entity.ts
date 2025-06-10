@@ -1,8 +1,10 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Brand } from 'src/brands/brand.entity';
+import { ParfumeGender } from 'src/utils/types/parfumeGender';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity("products")
-export class Product{
-    @PrimaryGeneratedColumn()
+export class Product {
+    @PrimaryGeneratedColumn('increment')
     productId: number;
 
     @Column({
@@ -13,8 +15,12 @@ export class Product{
     @Column()
     description: string;
 
-    @Column()
-    brandId: number;
+    @ManyToOne(() => Brand, (brand) => brand.products, {
+        onDelete: 'CASCADE',
+        
+    })
+    @JoinColumn({ name: 'brand_id' })
+    brand: Brand;
 
     @Column({
         nullable: false
@@ -25,10 +31,18 @@ export class Product{
     imageUrl: string;
 
     @Column({
+        nullable: false,
+        type: "enum",
+        enum: ParfumeGender,
+        default: ParfumeGender.unisex,
+    })
+    gender: ParfumeGender;
+
+    @Column({
         nullable: false
     })
     stockQuantity: number;
 
     @Column()
-    categoryId: number
+    categoryId: number;
 } 
