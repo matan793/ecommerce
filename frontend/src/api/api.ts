@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Product } from "../hooks/useProducts";
+import { BrandType, ProductType } from "../utils/types/types";
 
 export const apiClient = axios.create({
     baseURL: "http://localhost:3000",
@@ -13,7 +13,7 @@ export const apiClient = axios.create({
 export const api = {
     getProducts: async () => {
         try {
-            const response = await apiClient.get<Product[]>("/products");
+            const response = await apiClient.get<ProductType[]>("/products");
             return response.data;
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -27,6 +27,16 @@ export const api = {
             return response.data;
         } catch (error) {
             console.error(`Error fetching product with id ${id}:`, error);
+            throw error;
+        }
+    },
+
+    getBrands: async () => {
+        try {
+            const response = await apiClient.get<BrandType[]>("/brands");
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching brands:", error);
             throw error;
         }
     },

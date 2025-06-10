@@ -59,7 +59,6 @@ export class AuthController {
             return;
         }
         const newUser = await this.userService.create(userAuth);
-        console.log(newUser);
 
         response.cookie('access_token', (await this.authService.login(newUser)).access_token, {
             httpOnly: true,

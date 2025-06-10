@@ -26,7 +26,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   private static extractJWT(req: Request): string | null {
-    console.log(req.cookies.access_token)
     if (req.cookies && 'access_token' in req.cookies && req.cookies.access_token.length > 0) {
       return req.cookies.access_token;
     }

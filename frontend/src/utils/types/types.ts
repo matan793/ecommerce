@@ -10,6 +10,13 @@ export interface BrandType {
     id: number;
     name: string;
     description?: string;
+    poducts: ProductType[];
+}
+
+export enum ParfumeGenderType {
+    male="male",
+    female="female",
+    unisex="unisex"
 }
 export interface ProductType {
     id: string;

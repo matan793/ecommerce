@@ -4,11 +4,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '../../contexts';
 import { apiClient } from '../../api/api';
+import { useNavigate } from 'react-router';
 
 const Navbar: React.FC = () => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const { user, setUser } = useUser();
+    const navigate = useNavigate();
 
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -49,16 +51,10 @@ const Navbar: React.FC = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Button color='inherit' variant="text" component="div" >
+                    <Button color='inherit' variant="text" component="div" onClick={() => {navigate('/')}} >
                         Perfumes
                     </Button>
-                    <Button color='inherit'  variant="text" component="div" >
-                        Men's Perfumes
-                    </Button>
-                    <Button color='inherit' variant="text" component="div">
-                        Woman's Perfumes
-                    </Button>
-                    <Button color='inherit' variant="text" component="div">
+                    <Button color='inherit' variant="text" component="div" onClick={() => {navigate('/brands')}} >
                         Brands
                     </Button>
                     {user ? (
@@ -94,7 +90,7 @@ const Navbar: React.FC = () => {
                         </div>
                     ) : (
                         <Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>
-                            <Button color="inherit" href="/login">
+                            <Button color="inherit"onClick={() => {navigate('/login')}}>
                                 Login
                             </Button>
                         </Typography>

@@ -5,11 +5,14 @@ import { useProducts } from '../hooks/useProducts';
 import banner from '../assets/banner.png';
 import Navbar from './Navbar/Navbar';
 import ProductsGrid from './productsGrid/ProductsGrid';
+import ComboBox from './filterBar/FilterBar';
+import { useBrands } from '../hooks/useBrands';
+import { BrandType } from '../utils/types/types';
 
 
 const HomePage: React.FC = () => {
   const { products } = useProducts();
-  
+  const { brands } = useBrands();
   // Golden banner styles
   const bannerStyle: React.CSSProperties = {
     width: '100%',
@@ -28,6 +31,7 @@ const HomePage: React.FC = () => {
   return (
     <>
   <Navbar />
+
   <div style={{ ...bannerStyle, height: '270px', paddingLeft: 40, paddingRight: 40, justifyContent: 'center' }}>
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <img
@@ -49,6 +53,9 @@ const HomePage: React.FC = () => {
       </div>
     </div>
   </div>
+
+        <ComboBox lable='brand' options={brands.map((brand: BrandType) => brand.name)} />
+        
     <Container sx={{ py: 6 }}>
       <Grid container spacing={4} justifyContent="center">
         <ProductsGrid products={products} />
