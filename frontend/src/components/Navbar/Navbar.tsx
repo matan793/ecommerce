@@ -4,9 +4,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '../../contexts';
 import { apiClient } from '../../api/api';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+    menuButtonCallback?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ menuButtonCallback }) => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const { user, setUser } = useUser();
@@ -17,10 +21,10 @@ const Navbar: React.FC = () => {
         setAnchorEl(event.currentTarget);
     };
 
-    
+
     const handleLogout = async () => {
         try {
-            const res = await apiClient.post('/auth/logout', {withCredentials: true});
+            const res = await apiClient.post('/auth/logout', { withCredentials: true });
             if (res.status === 200) {
                 setUser(null);
             } else {
@@ -41,25 +45,18 @@ const Navbar: React.FC = () => {
     return (
         <>
             <AppBar position="static" sx={{ backgroundColor: 'black' }}>
-                <Toolbar sx={{gap: 4, display: 'flex', justifyContent: 'space-between'}}>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Button color='inherit' variant="text" component="div" onClick={() => {navigate('/')}} >
+                <Toolbar sx={{ gap: 4, display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="h6" sx={{ cursor: "default" }} component="div" >Matan Parfumerie</Typography>
+                    <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/') }} >
                         Perfumes
                     </Button>
-                    <Button color='inherit' variant="text" component="div" onClick={() => {navigate('/brands')}} >
+                    <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/brands') }} >
                         Brands
                     </Button>
                     {user ? (
-                        <div>
+                        <div style={{ flexGrow: 1, textAlign: 'right' }}>
                             <IconButton
+
                                 size="large"
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
@@ -70,6 +67,7 @@ const Navbar: React.FC = () => {
                                 <AccountCircle />
                             </IconButton>
                             <Menu
+
                                 id="menu-appbar"
                                 anchorEl={anchorEl}
                                 anchorOrigin={{
@@ -89,13 +87,17 @@ const Navbar: React.FC = () => {
                             </Menu>
                         </div>
                     ) : (
-                        <Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>
-                            <Button color="inherit"onClick={() => {navigate('/login')}}>
+                        <><Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>
+                            <Button color="inherit" onClick={() => { navigate('/login'); }}>
                                 Login
                             </Button>
-                        </Typography>
+                        </Typography><Typography variant="body1" sx={{ textAlign: 'right' }}>
+                                <Button color="inherit" onClick={() => { navigate('/register'); }}>
+                                    register
+                                </Button>
+                            </Typography></>
                     )}
-                    
+
                 </Toolbar>
             </AppBar>
         </>

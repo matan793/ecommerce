@@ -5,11 +5,14 @@ import HomePage from './components/HomePage.tsx'
 import LoginPage from './components/loginPage/LoginPage.tsx'
 import { UserProvider } from './contexts/userContext.tsx'
 import './app.css'
+import RegisterPage from './components/registerPage/register.tsx'
+import NotFoundPage from './components/notFoundPage/NotFoundPage.tsx'
 
 
 const router = createBrowserRouter([
-  {path: '/', element: <HomePage />},
+  {path: '/', element: <HomePage />, errorElement: <NotFoundPage />},
   {path: '/login', element: <LoginPage />},
+  {path: '/register', element: <RegisterPage />},
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

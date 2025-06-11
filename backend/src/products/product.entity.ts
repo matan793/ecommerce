@@ -1,7 +1,8 @@
 import { Brand } from 'src/brands/brand.entity';
+import { Cart } from 'src/cart/cart.entity';
 import { Category } from 'src/categories/category.entity';
 import { ParfumeGender } from 'src/utils/types/parfumeGender';
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity("products")
 export class Product {
@@ -48,4 +49,7 @@ export class Product {
     })
     @JoinColumn({ name: 'category_id' })
     category: Category;
+
+    @OneToMany(() => Cart, cart => cart.product)
+    cartItems: Cart[];
 } 

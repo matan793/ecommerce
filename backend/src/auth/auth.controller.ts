@@ -1,5 +1,5 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Request, Res, Get, } from '@nestjs/common';
-import { userAuth } from 'src/utils/DTO/userAuth';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Request, Res, Get, UsePipes, ValidationPipe, } from '@nestjs/common';
+import { userAuth, UserRegisterDTO } from 'src/utils/DTO/userAuth';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/users/users.entity';
@@ -52,7 +52,10 @@ export class AuthController {
 
     @Post('register')
     @HttpCode(HttpStatus.CREATED)
-    async register(@Body() userAuth: userAuth, @Res({ passthrough: true }) response: Response) {
+    @UsePipes(new ValidationPipe({
+        whitelist: true,
+    }))
+    async register(@Body() userAuth: UserRegisterDTO, @Res({ passthrough: true }) response: Response) {
         const user = await this.userService.findByEmailAndPass(userAuth);
         if (user) {
             response.status(HttpStatus.BAD_REQUEST).send({ message: 'Registration failed' });

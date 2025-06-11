@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { BrandsModule } from './brands/brands.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -26,7 +27,8 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     UsersModule,
     BrandsModule,
-    CategoriesModule],
+    CategoriesModule,
+    CartModule],
   //controllers: [AppController],
   providers: [AppService],
 })

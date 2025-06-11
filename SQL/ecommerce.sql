@@ -70,7 +70,7 @@ CREATE TABLE ecommerce.categories (
 
 CREATE TABLE ecommerce.brands (
 	brand_id SERIAL PRIMARY KEY,
-	name TEXt NOT NULL,
+	name TEXT NOT NULL UNIQUE,
 	description TEXT
 );
 

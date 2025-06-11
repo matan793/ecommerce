@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, Typography, Paper, Container } from '@mui/material';
 import { apiClient } from '../../api/api';
-import { useUser } from '../../contexts';
 import { Link, useNavigate } from 'react-router';
 import Navbar from '../Navbar/Navbar';
 
@@ -18,14 +17,18 @@ const bannerStyle: React.CSSProperties = {
     overflow: 'hidden'
 };
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [birthdate, setBirthdate] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const { setUser } = useUser();
     const navigate = useNavigate();
 
+    // Disable scrolling only on this page
     useEffect(() => {
         const original = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
@@ -35,32 +38,44 @@ const LoginPage: React.FC = () => {
     }, []);
 
     const validate = () => {
-        if (!email || !password) {
-            setError('Email and password are required.');
+        if (!firstName || !lastName || !email || !birthdate || !password) {
+            setError('All fields except phone number are required.');
             return false;
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             setError('Please enter a valid email address.');
             return false;
         }
+        if (phone && !/^\+?\d{7,15}$/.test(phone)) {
+            setError('Please enter a valid phone number.');
+            return false;
+        }
         setError(null);
         return true;
     };
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
         if (!validate()) return;
         setLoading(true);
         try {
-            const response = await apiClient.post('/auth/login', { email, password });
-            if (response.status === 200) {
-                const userData = response.data;
-                setUser(userData);
-                navigate('/');
+            const response = await apiClient.post('/auth/register', {
+                firstName,
+                lastName,
+                email,
+                phone: phone || null,
+                birthdate,
+                password,
+            });
+            if (response.status === 201) {
+                navigate('/login');
             } else {
-                setError('Login failed. Please check your credentials.');
+                setError('Registration failed. Please check your details.');
             }
-        } catch (err) {
-            setError('Login failed. Please check your credentials.');
+        } catch (err: any) {
+            setError(
+                err?.response?.data?.message ||
+                'Registration failed. Please check your details.'
+            );
         } finally {
             setLoading(false);
         }
@@ -68,7 +83,7 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        handleLogin();
+        handleRegister();
     };
 
     return (
@@ -80,7 +95,6 @@ const LoginPage: React.FC = () => {
                 justifyContent="center"
                 alignItems="center"
                 minHeight="100vh"
-                height="100vh"
                 bgcolor="#f5f5f5"
                 sx={{
                     background: 'linear-gradient(120deg, #fffbe6 0%, #f5e6ca 100%)',
@@ -103,10 +117,10 @@ const LoginPage: React.FC = () => {
                         />
                         <div>
                             <Typography variant="h3" fontWeight="bold" color="#6d4c00">
-                                Welcome Back
+                                Create Account
                             </Typography>
                             <Typography variant="h6" color="#7c6f57">
-                                Login to Matan Parfumerie
+                                Register for Matan Parfumerie
                             </Typography>
                         </div>
                     </div>
@@ -124,6 +138,30 @@ const LoginPage: React.FC = () => {
                     >
                         <form onSubmit={handleSubmit}>
                             <TextField
+                                label="First Name"
+                                fullWidth
+                                margin="normal"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                required
+                                sx={{
+                                    background: '#fffbe6',
+                                    borderRadius: 2,
+                                }}
+                            />
+                            <TextField
+                                label="Last Name"
+                                fullWidth
+                                margin="normal"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                required
+                                sx={{
+                                    background: '#fffbe6',
+                                    borderRadius: 2,
+                                }}
+                            />
+                            <TextField
                                 label="Email"
                                 type="email"
                                 fullWidth
@@ -131,7 +169,34 @@ const LoginPage: React.FC = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                autoFocus
+                                sx={{
+                                    background: '#fffbe6',
+                                    borderRadius: 2,
+                                }}
+                            />
+                            <TextField
+                                label="Phone Number"
+                                type="tel"
+                                fullWidth
+                                margin="normal"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                sx={{
+                                    background: '#fffbe6',
+                                    borderRadius: 2,
+                                }}
+                                placeholder="+123456789"
+                            />
+                            <TextField
+                                label="Birthdate"
+                                type="date"
+                                fullWidth
+                                margin="normal"
+                                value={birthdate}
+                                onChange={(e) => setBirthdate(e.target.value)}
+                                required
+                              
+                                slotProps={{inputLabel: { shrink: true }}}
                                 sx={{
                                     background: '#fffbe6',
                                     borderRadius: 2,
@@ -175,25 +240,24 @@ const LoginPage: React.FC = () => {
                                 }}
                                 disabled={loading}
                             >
-                                {loading ? 'Logging in...' : 'Login'}
+                                {loading ? 'Registering...' : 'Register'}
                             </Button>
                         </form>
-                        <Typography
+                                                <Typography
                             variant="body2"
                             align="center"
                             sx={{ mt: 2 }}
                         >
-                            Not registered yet?{' '}
-                            <Link to="/register" style={{ color: '#6d4c00', fontWeight: 'bold', textDecoration: 'underline' }}>
-                                Register here
+                            have a user?{' '}
+                            <Link to="/login" style={{ color: '#6d4c00', fontWeight: 'bold', textDecoration: 'underline' }}>
+                                Login here
                             </Link>
                         </Typography>
                     </Paper>
                 </Container>
-
             </Box>
         </>
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

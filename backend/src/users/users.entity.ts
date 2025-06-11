@@ -1,9 +1,10 @@
+import { Cart } from "src/cart/cart.entity";
 import { userRoles } from "src/utils/types/userRoles";
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('users')
 export class User {
-        @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn('increment')
     userId: number;
 
     @Column({
@@ -46,4 +47,7 @@ export class User {
         default: Date.now()
     })
     createdAt: Date
+
+    @OneToMany(() => Cart, cart => cart.user)
+    cart: Cart[];
 }

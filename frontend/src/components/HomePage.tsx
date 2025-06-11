@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Typography, Grid, Container, alpha, InputBase, styled } from '@mui/material';
+import { Typography, Grid, Container, alpha, InputBase, styled, Drawer, Divider, Button } from '@mui/material';
 import { useProducts } from '../hooks/useProducts';
 import Navbar from './Navbar/Navbar';
 import ProductsGrid from './productsGrid/ProductsGrid';
@@ -47,6 +47,12 @@ const HomePage: React.FC = () => {
     category: 'All',
     search: '',
   });
+  const [open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+
 
   const filteredProducts = useMemo(
     () =>
@@ -68,8 +74,19 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      <Navbar />
-
+      <Navbar menuButtonCallback={toggleDrawer(true)} />
+      <Drawer
+        anchor="left"
+        open={open}
+        onClose={toggleDrawer(false)}>
+          <Button onClick={toggleDrawer(false)} style={{ margin: 16, color: '#6d4c00' }}>
+            Cart
+          </Button>
+          <Divider />
+          <Button onClick={toggleDrawer(false)} style={{ margin: 16, color: '#6d4c00' }}>
+            Orders
+          </Button>
+      </Drawer>
       <div style={{ ...bannerStyle, height: '270px', paddingLeft: 40, paddingRight: 40, justifyContent: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
