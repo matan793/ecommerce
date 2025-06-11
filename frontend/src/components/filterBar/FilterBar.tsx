@@ -3,21 +3,26 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { ParfumeGenderType } from '../../utils/types/types';
 
-interface ComboBoxProps {
+interface FilterBarProps {
     lable: string;
     options: string[];
-    changeCallback?: () => void;
+    changeCallback?: (value: string) => void;
+
 }
 
-const ComboBox: React.FC<ComboBoxProps> = ({ options, lable }) => {
+const FilterBar: React.FC<FilterBarProps> = ({ options, lable, changeCallback }) => {
+
     return (
         <Autocomplete
             disablePortal
-            options={options}
+            options={["All", ...options]}
             sx={{ width: 300 }}
+             onChange={(_, value) => {
+                if (changeCallback) changeCallback(value || "All");
+            }}
             renderInput={(params) => <TextField {...params} label={lable} />}
         />
     );
 };
 
-export default ComboBox;
+export default FilterBar;

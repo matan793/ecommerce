@@ -7,12 +7,12 @@ interface ProductsGridProps {
   products: ProductType[];
 }
 
-const ProductsGrid: React.FC<ProductsGridProps> = ({products}) => {
+const ProductsGrid: React.FC<ProductsGridProps> = ({products}) => {  
     return (
         <>
         {products.map((parfume: ProductType) => (
-          <Grid key={parfume.id}>
-            <ParfumeCard
+          <Grid>
+            <ParfumeCard key={parfume.id}
               name={parfume.name}
               brand={parfume.brand.name}
               price={parfume.price}

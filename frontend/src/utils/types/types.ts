@@ -18,6 +18,11 @@ export enum ParfumeGenderType {
     female="female",
     unisex="unisex"
 }
+export interface CategoryType {
+    categoryId: string;
+    name: string;
+    description?: string;
+}
 export interface ProductType {
     id: string;
     name: string;
@@ -25,4 +30,5 @@ export interface ProductType {
     price: number;
     imageUrl: string;
     description?: string;
+    category: CategoryType;
 }

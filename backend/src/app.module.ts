@@ -7,6 +7,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { BrandsModule } from './brands/brands.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -24,7 +25,8 @@ import { BrandsModule } from './brands/brands.module';
     ProductsModule,
     AuthModule,
     UsersModule,
-    BrandsModule],
+    BrandsModule,
+    CategoriesModule],
   //controllers: [AppController],
   providers: [AppService],
 })

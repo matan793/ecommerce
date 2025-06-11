@@ -1,4 +1,5 @@
 import { Brand } from 'src/brands/brand.entity';
+import { Category } from 'src/categories/category.entity';
 import { ParfumeGender } from 'src/utils/types/parfumeGender';
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
@@ -17,7 +18,7 @@ export class Product {
 
     @ManyToOne(() => Brand, (brand) => brand.products, {
         onDelete: 'CASCADE',
-        
+
     })
     @JoinColumn({ name: 'brand_id' })
     brand: Brand;
@@ -43,6 +44,8 @@ export class Product {
     })
     stockQuantity: number;
 
-    @Column()
-    categoryId: number;
+    @ManyToOne(() => Category, (category) => category.products, {
+    })
+    @JoinColumn({ name: 'category_id' })
+    category: Category;
 } 
