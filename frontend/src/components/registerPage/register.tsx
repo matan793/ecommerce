@@ -101,30 +101,6 @@ const RegisterPage: React.FC = () => {
                     overflow: 'hidden',
                 }}
             >
-                <div style={{ ...bannerStyle, height: '180px', width: 500, margin: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                        <img
-                            src="/logo.png"
-                            alt="Logo"
-                            style={{
-                                height: 120,
-                                marginRight: 36,
-                                filter: 'drop-shadow(0 4px 16px rgba(218,165,32,0.25))',
-                                borderRadius: 12,
-                                background: '#fff8dc',
-                                padding: 8,
-                            }}
-                        />
-                        <div>
-                            <Typography variant="h3" fontWeight="bold" color="#6d4c00">
-                                Create Account
-                            </Typography>
-                            <Typography variant="h6" color="#7c6f57">
-                                Register for Matan Parfumerie
-                            </Typography>
-                        </div>
-                    </div>
-                </div>
                 <Container maxWidth="xs" sx={{ mt: 0 }}>
                     <Paper
                         elevation={6}

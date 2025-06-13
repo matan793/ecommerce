@@ -8,37 +8,42 @@ interface UserContextType {
     user: UserType | null;
     setUser: (user: UserType | null) => void;
     logout: () => void;
+    fetchUser: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserType | null>(null);
-
+    const [loading, setLoading] = useState<boolean>(true);
     const logout = () => setUser(null);
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await apiClient.get('/auth/user')
-                console.log('res', res);
-                if (res.status === 200) {  
-                    setUser(res.data as UserType);
-                } else {
-                    setUser(null);
-                }
-            } catch (err) {
+    const fetchUser = async () => {
+   
+
+        try {
+            const res = await apiClient.get<UserType>('/auth/user')
+
+            if (res.status === 200) {
+                setUser(res.data as UserType);
+                // setLoading(false);
+            } else {
                 setUser(null);
-                console.log('Error fetching user:', err);
-                
-            } finally {
-                //setLoading(false);
             }
-        };
+        } catch (err) {
+            setUser(null);
+            console.log('Error fetching user:', err);
+
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+
 
         fetchUser();
     }, []);
     return (
-        <UserContext.Provider value={{ user, setUser, logout }}>
+        <UserContext.Provider value={{ user, setUser, logout, fetchUser }}>
             {children}
         </UserContext.Provider>
     );

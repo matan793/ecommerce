@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const { setUser } = useUser();
+    const { setUser, fetchUser } = useUser();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -56,6 +56,7 @@ const LoginPage: React.FC = () => {
                 const userData = response.data;
                 setUser(userData);
                 navigate('/');
+                fetchUser();
             } else {
                 setError('Login failed. Please check your credentials.');
             }
@@ -87,30 +88,6 @@ const LoginPage: React.FC = () => {
                     overflow: 'hidden',
                 }}
             >
-                <div style={{ ...bannerStyle, height: '180px', width: 500, margin: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                        <img
-                            src="/logo.png"
-                            alt="Logo"
-                            style={{
-                                height: 120,
-                                marginRight: 36,
-                                filter: 'drop-shadow(0 4px 16px rgba(218,165,32,0.25))',
-                                borderRadius: 12,
-                                background: '#fff8dc',
-                                padding: 8,
-                            }}
-                        />
-                        <div>
-                            <Typography variant="h3" fontWeight="bold" color="#6d4c00">
-                                Welcome Back
-                            </Typography>
-                            <Typography variant="h6" color="#7c6f57">
-                                Login to Matan Parfumerie
-                            </Typography>
-                        </div>
-                    </div>
-                </div>
                 <Container maxWidth="xs" sx={{ mt: 0 }}>
                     <Paper
                         elevation={6}

@@ -4,6 +4,7 @@ export interface UserType {
     firstName: string;
     lastName: string;
     phoneNumber?: string;
+    cart: CartItemType[];
     createdAt: Date;
 }
 export interface BrandType {
@@ -22,6 +23,12 @@ export interface CategoryType {
     categoryId: string;
     name: string;
     description?: string;
+}
+export interface CartItemType {
+    productId: number;
+    userId: number;
+    quantity: number;
+    product: ProductType;
 }
 export interface ProductType {
     id: string;

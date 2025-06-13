@@ -19,9 +19,9 @@ export class Product {
 
     @ManyToOne(() => Brand, (brand) => brand.products, {
         onDelete: 'CASCADE',
-
+        eager: true,
     })
-    @JoinColumn({ name: 'brand_id' })
+    @JoinColumn({ name: 'brand_id'})
     brand: Brand;
 
     @Column({

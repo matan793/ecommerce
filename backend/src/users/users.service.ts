@@ -21,7 +21,13 @@ export class UsersService {
         return null;
     }
     async findById(id: number): Promise<User> {
-        const user = await this.userRepository.findOne({ where: { userId: id } });
+        //const user = await this.userRepository.findOne({ where: { userId: id }, relations: ['cart'] });
+        const user = await this.userRepository.createQueryBuilder('user')
+            .innerJoinAndSelect('user.cart', 'cart')
+            .innerJoinAndSelect('cart.product', 'product')
+            .innerJoinAndSelect('product.brand', 'brand ')
+            .where('user.userId = :id', { id })
+            .getOne();
         if (!user) {
             throw new NotFoundException(`User with ID ${id} not found`);
         }
@@ -32,5 +38,15 @@ export class UsersService {
         const newUser = this.userRepository.create(user);
         newUser.password = await bcrypt.hash(newUser.password, 10); // Hash the password before saving
         return await this.userRepository.save(newUser);
+    }
+
+    async saveUserByID(userId: number, user: DeepPartial<User>){
+        const existingUser = await this.userRepository.findOne({ where: { userId} });
+        
+         
+        if (!existingUser) {
+            throw new NotFoundException(`User with ID ${userId} not found`);
+        }
+        return await this.userRepository.update({userId}, user)
     }
 }

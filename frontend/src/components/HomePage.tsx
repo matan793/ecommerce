@@ -4,10 +4,14 @@ import { useProducts } from '../hooks/useProducts';
 import Navbar from './Navbar/Navbar';
 import ProductsGrid from './productsGrid/ProductsGrid';
 import { useBrands } from '../hooks/useBrands';
-import { BrandType, ProductType } from '../utils/types/types';
+import { BrandType, CartItemType, ProductType, UserType } from '../utils/types/types';
 import { CategoryType, useCategories } from '../hooks/useCategories';
 import FilterBar from './filterBar/FilterBar';
 import SearchBar from './SearchBar/SearchBar';
+import Cart from './cart/Cart';
+import { api, apiClient } from '../api/api';
+import { useUser } from '../contexts';
+import { useNavigate } from 'react-router-dom';
 
 interface filterOptions {
   brand: string;
@@ -42,17 +46,48 @@ const HomePage: React.FC = () => {
   const { products } = useProducts();
   const { brands } = useBrands();
   const { categories } = useCategories();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<filterOptions>({
     brand: 'All',
     category: 'All',
     search: '',
   });
-  const [open, setOpen] = React.useState(false);
+ 
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
+  const handleLogout = async () => {
+    try {
+      const res = await apiClient.post('/auth/logout', { withCredentials: true });
+      if (res.status === 200) {
+        setUser(null);
+      } else {
+        // Handle error case
+        console.error('Logout failed', res);
+      }
+    } catch (error) {
+      console.error('Logout failed', error);
 
+    } finally {
+
+    }
+  }
+
+  const menuOptions: { title: string; onClick: () => void }[] = [
+    {
+      title: 'Cart',
+      onClick: () => setIsCartOpen(true),
+    },
+    {
+      title: 'Profile',
+      onClick: () => { navigate('/profile') },
+    },
+    {
+      title: 'Logout',
+      onClick: handleLogout,
+    },
+
+  ];
 
   const filteredProducts = useMemo(
     () =>
@@ -72,21 +107,49 @@ const HomePage: React.FC = () => {
 
 
 
+const handleUpdateQuantity = async (id: number, newQuantity: number): Promise<void> => {
+    try {
+        const newUser = { ...user };
+        if (user && newUser.cart) {
+            const cartItem = newUser.cart.find((item: CartItemType) => item.productId === id);
+            if (cartItem) {
+                const quantityDiff = newQuantity - cartItem.quantity;
+                await api.addToCart(id, quantityDiff);
+                cartItem.quantity = newQuantity;
+                setUser(newUser as UserType);
+            }
+        }
+    } catch (error) {
+        console.error("Failed to update cart quantity:", error);
+        // You might want to show an error message to the user
+    }
+}
+
+const handleSaveCart = async () => {
+    try {
+        if (!user?.cart) return;
+        
+        // Since we're already saving changes immediately in handleUpdateQuantity,
+        // we can just close the cart here
+        setIsCartOpen(false);
+    } catch (error) {
+        console.error("Failed to save cart:", error);
+        // You might want to show an error message to the user
+    }
+}
+
   return (
     <>
-      <Navbar menuButtonCallback={toggleDrawer(true)} />
-      <Drawer
-        anchor="left"
-        open={open}
-        onClose={toggleDrawer(false)}>
-          <Button onClick={toggleDrawer(false)} style={{ margin: 16, color: '#6d4c00' }}>
-            Cart
-          </Button>
-          <Divider />
-          <Button onClick={toggleDrawer(false)} style={{ margin: 16, color: '#6d4c00' }}>
-            Orders
-          </Button>
-      </Drawer>
+      <Navbar menuItems={menuOptions} />
+      <Cart
+        open={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        items={user?.cart || []}
+        onUpdateQuantity={handleUpdateQuantity}
+        onPurchaceNow={() => { }}
+        onSaveCart={handleSaveCart}
+
+      />
       <div style={{ ...bannerStyle, height: '270px', paddingLeft: 40, paddingRight: 40, justifyContent: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
@@ -123,7 +186,8 @@ const HomePage: React.FC = () => {
         <Grid container spacing={4} justifyContent="center">
           <ProductsGrid products={filteredProducts} />
         </Grid>
-      </Container></>
+      </Container>
+    </>
   );
 };
 

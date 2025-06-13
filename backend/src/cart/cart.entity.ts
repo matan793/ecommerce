@@ -4,7 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Cart {
-    @PrimaryColumn()
+    @PrimaryColumn({select: false})
     userId: number;
     @PrimaryColumn()
     productId: number;
@@ -13,7 +13,7 @@ export class Cart {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @ManyToOne(() => Product, product => product.cartItems, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Product, product => product.cartItems, { onDelete: 'CASCADE', eager: true })
     @JoinColumn({ name: 'product_id' })
     product: Product;
 
