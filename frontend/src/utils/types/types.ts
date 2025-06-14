@@ -5,6 +5,7 @@ export interface UserType {
     lastName: string;
     phoneNumber?: string;
     cart: CartItemType[];
+    address: AddressType;
     createdAt: Date;
 }
 export interface BrandType {
@@ -31,11 +32,51 @@ export interface CartItemType {
     product: ProductType;
 }
 export interface ProductType {
-    id: string;
+    productId: string;
     name: string;
     brand: BrandType;
     price: number;
     imageUrl: string;
     description?: string;
     category: CategoryType;
+}
+export enum OrderStatus{
+    pending='pending',
+    processing='processing',
+    cancelled='cancelled',
+    delivered='delivered'
+}
+export interface AddressType{
+    addressId: number;
+    city: string;
+    street: string;
+    country: string;
+    postalCode: string;
+}
+export interface OrderItemType {
+    product: ProductType;
+    quantity: number;
+    unitPrice: number;
+}
+export enum PaymentMethod{
+    creditCard='credit_card',
+    paypal='paypal'
+}
+export enum PaymentStatus{
+    pending='pending',
+    cancelled='cancelled',
+    approved='approved'
+}
+export interface PaymentType{
+    paymentMethod: PaymentMethod;
+    paymentStatus: PaymentStatus;
+    amount: number;
+}
+export interface OrderType{
+    status: OrderStatus;
+    totalAmount: number;
+    user: UserType;
+    address: AddressType;
+    items: OrderItemType[];
+    payments: PaymentType[];
 }

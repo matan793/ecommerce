@@ -74,7 +74,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <>
-            <Navbar />
+            {/* <Navbar /> */}
             <Box
                 display="flex"
                 flexDirection="column"

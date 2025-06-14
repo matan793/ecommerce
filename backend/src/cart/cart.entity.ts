@@ -4,7 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Cart {
-    @PrimaryColumn({select: false})
+    @PrimaryColumn()
     userId: number;
     @PrimaryColumn()
     productId: number;
@@ -19,4 +19,4 @@ export class Cart {
 
     @Column({ default: 1, nullable: false })
     quantity: number;
-} 
+}  

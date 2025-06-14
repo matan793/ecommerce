@@ -25,15 +25,17 @@ export class CartService {
 
     async addProductToCart(userId: number, productId: number, quantity: number): Promise<Cart> {
         const cart = await this.cartRepository.findOne({
-            where: { userId, productId },
+            where: { userId,  productId  },
+            relations: ['product'],
         });
 
         if (cart) {
             cart.quantity += quantity;
-            return this.cartRepository.save(cart);
+            return await this.cartRepository.save(cart);
         } else {
-            const newCart = this.cartRepository.create({ userId, productId, quantity });
-            return this.cartRepository.save(newCart);
+            const newCart = this.cartRepository.create({ userId, product: {  productId }, quantity });
+            return await this.cartRepository.save(newCart);
+            // return await this.cartRepository.save(newCart);
         }
     }
 

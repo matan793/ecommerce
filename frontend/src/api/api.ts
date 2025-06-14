@@ -1,5 +1,6 @@
 import axios from "axios";
-import { BrandType, ProductType, UserType } from "../utils/types/types";
+import { BrandType, OrderType, ProductType, UserType } from "../utils/types/types";
+import { toast } from "react-toastify";
 
 export const apiClient = axios.create({
     baseURL: "http://localhost:3000",
@@ -16,7 +17,7 @@ export const api = {
             const response = await apiClient.get<ProductType[]>("/products");
             return response.data;
         } catch (error) {
-            console.error("Error fetching products:", error);
+            toast.error('somthing went wrong, please refresh')
             throw error;
         }
     },
@@ -26,7 +27,7 @@ export const api = {
             const response = await apiClient.get(`/products/${id}`);
             return response.data;
         } catch (error) {
-            console.error(`Error fetching product with id ${id}:`, error);
+
             throw error;
         }
     },
@@ -36,7 +37,7 @@ export const api = {
             const response = await apiClient.get<BrandType[]>("/brands");
             return response.data;
         } catch (error) {
-            console.error("Error fetching brands:", error);
+
             throw error;
         }
     },
@@ -45,7 +46,6 @@ export const api = {
             const response = await apiClient.get("/categories");
             return response.data;
         } catch (error) {
-            console.error("Error fetching categories:", error);
             throw error;
         }
     },
@@ -54,13 +54,12 @@ export const api = {
             const response = await apiClient.get("/cart");
             return response.data;
         } catch (error) {
-            console.error("Error fetching cart items:", error);
             throw error;
         }
     },
     updateUser: async (user: UserType) => {
         try {
-            const response = await apiClient.post("/users/update", {...user});
+            const response = await apiClient.post("/users/update", { ...user });
             if (response.status === 404)
                 throw new Error("User not found");
 
@@ -69,7 +68,7 @@ export const api = {
             throw error;
         }
     },
-        addToCart: async (productId: number, quantity: number) => {
+    addToCart: async (productId: number, quantity: number) => {
         try {
             const response = await apiClient.post("/cart/add", {
                 productId,
@@ -77,8 +76,17 @@ export const api = {
             });
             return response.data;
         } catch (error) {
-            console.error("Error adding to cart:", error);
+
             throw error;
+        }
+    },
+    placeOrder: async (order: OrderType) => {
+        try {
+            const response = await apiClient.post('order/place', {
+                ...order
+            })
+        } catch (error) {
+            
         }
     }
 };

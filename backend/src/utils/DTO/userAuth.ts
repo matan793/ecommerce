@@ -1,10 +1,13 @@
 import { Optional } from '@nestjs/common';
 import { Allow, IsDate, IsInt, IsString, Min } from 'class-validator';
+import { Address } from 'src/addresses/addresses.entity';
 
 export interface userAuth{
     email: string;
     password: string;
 }
+
+
 
 export class UserRegisterDTO {
     @IsString({ message: 'Email must be a string' })
@@ -19,4 +22,8 @@ export class UserRegisterDTO {
     birthdate: Date;
     
     phoneNumber: string;
+
+    @Allow()
+    address: Address
+
 }

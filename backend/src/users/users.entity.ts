@@ -1,6 +1,8 @@
+import { Address } from "src/addresses/addresses.entity";
 import { Cart } from "src/cart/cart.entity";
+import { Order } from "src/orders/orders.entity";
 import { userRoles } from "src/utils/types/userRoles";
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -50,4 +52,11 @@ export class User {
 
     @OneToMany(() => Cart, cart => cart.user)
     cart: Cart[];
+
+    @OneToOne(() => Address, address => address.user, { cascade: true, eager: true })
+    @JoinColumn({name: "address_id"})
+    address: Address;
+
+    @OneToMany(() => Order, (order: Order) => order.user)
+    orders: Order[]
 }

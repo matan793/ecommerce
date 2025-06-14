@@ -1,6 +1,7 @@
 import { Brand } from 'src/brands/brand.entity';
 import { Cart } from 'src/cart/cart.entity';
 import { Category } from 'src/categories/category.entity';
+import { OrderItem } from 'src/orderItems/orderItems.entity';
 import { ParfumeGender } from 'src/utils/types/parfumeGender';
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
@@ -21,7 +22,7 @@ export class Product {
         onDelete: 'CASCADE',
         eager: true,
     })
-    @JoinColumn({ name: 'brand_id'})
+    @JoinColumn({ name: 'brand_id' })
     brand: Brand;
 
     @Column({
@@ -52,4 +53,7 @@ export class Product {
 
     @OneToMany(() => Cart, cart => cart.product)
     cartItems: Cart[];
+
+    @OneToMany(() => OrderItem, orderItem => orderItem.product)
+    orderItems: OrderItem[];
 } 

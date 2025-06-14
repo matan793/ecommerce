@@ -2,6 +2,7 @@ import { Controller, Get, UseGuards, ValidationPipe, Request, Post, Body, UsePip
 import { CartService } from './cart.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AddToCartDTO } from 'src/utils/DTO/addToCartDTO';
+import { User } from 'src/users/users.entity';
 
 @Controller('cart')
 @UseGuards(AuthGuard('jwt'))
@@ -10,18 +11,19 @@ export class CartController {
 
 
     @Get()
-    async getCartByUserId(@Request() { userId }: { userId: number }) {
-        return await this.cartService.getCartByUserId(userId);
+    async getCartByUserId(@Request() { user }: { user: User }) {
+        return await this.cartService.getCartByUserId(user.userId);
     }
 
     @Post('add')
     @UsePipes(new ValidationPipe({
-        whitelist: true}))
+        whitelist: true
+    }))
+    @UseGuards(AuthGuard('jwt'))
     async addProductToCart(
-        @Request() { userId }: { userId: number },
+        @Request() { user }: { user: User },
         @Body() cart: AddToCartDTO
     ) {
-        return await this.cartService.addProductToCart(userId, cart.productId, cart.quantity);
+        return await this.cartService.addProductToCart(user.userId, cart.productId, cart.quantity);
     }
 }
-  

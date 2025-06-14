@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { UserType } from '../utils/types/types';
 import { apiClient } from '../api/api';
+import { toast } from 'react-toastify';
 
 
 
@@ -31,7 +32,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             }
         } catch (err) {
             setUser(null);
-            console.log('Error fetching user:', err);
+            toast.error('somthing went wrong in login in, try again later')
 
         } finally {
             setLoading(false);

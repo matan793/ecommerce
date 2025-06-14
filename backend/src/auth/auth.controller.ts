@@ -42,7 +42,7 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard('jwt'))
-    @Get('/user')
+    @Get('user')
     @HttpCode(HttpStatus.OK)
     async getUser(@Request() { user }: { user: User }) {
 
@@ -63,12 +63,12 @@ export class AuthController {
         }
         const newUser = await this.userService.create(userAuth);
 
-        response.cookie('access_token', (await this.authService.login(newUser)).access_token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000 // 1 hour
-        });
+        // response.cookie('access_token', (await this.authService.login(newUser)).access_token, {
+        //     httpOnly: true,
+        //     secure: true,
+        //     sameSite: 'strict',
+        //     maxAge: 3600000 // 1 hour
+        // });
         return { message: 'Registration successful' };
     }
 

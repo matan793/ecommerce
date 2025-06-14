@@ -9,6 +9,8 @@ import { UsersModule } from './users/users.module';
 import { BrandsModule } from './brands/brands.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
+import { OrdersModule } from './orders/orders.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -28,7 +30,9 @@ import { CartModule } from './cart/cart.module';
     UsersModule,
     BrandsModule,
     CategoriesModule,
-    CartModule],
+    CartModule,
+    OrdersModule,
+    PaymentsModule],
   //controllers: [AppController],
   providers: [AppService],
 })

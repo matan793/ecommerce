@@ -7,18 +7,29 @@ import { UserProvider } from './contexts/userContext.tsx'
 import './app.css'
 import RegisterPage from './components/registerPage/register.tsx'
 import NotFoundPage from './components/notFoundPage/NotFoundPage.tsx'
+import App from './App.tsx'
+import { BuyModeProvider } from './contexts/buyModeContext.tsx'
 
 
 const router = createBrowserRouter([
-  {path: '/', element: <HomePage />, errorElement: <NotFoundPage />},
-  {path: '/login', element: <LoginPage />},
-  {path: '/register', element: <RegisterPage />},
+  {
+    path: '/',
+    element: <App />, // <-- use Layout as the root element
+    errorElement: <NotFoundPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'login', element: <LoginPage /> },
+      { path: 'register', element: <RegisterPage /> },
+    ],
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <UserProvider>
-    <RouterProvider router={router} />
+      <BuyModeProvider>
+        <RouterProvider router={router} />
+      </BuyModeProvider>
     </UserProvider >
   </React.StrictMode>,
 )

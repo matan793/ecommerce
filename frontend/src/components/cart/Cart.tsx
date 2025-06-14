@@ -17,7 +17,6 @@ interface CartProps {
     items: CartItemType[]
     onUpdateQuantity: (id: number, newQuantity: number) => void;
     isLoading?: boolean; // Add this line
-    onSaveCart: () => void;
     onPurchaceNow: () => void;
 }
 
@@ -69,17 +68,6 @@ const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity }) =
                             }}
                         >
                             Checkout
-                        </Button>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            sx={{
-                                background: 'linear-gradient(90deg, #57B9FF 0%, #3A8DFF 100%)',
-                                color: 'white',
-                                py: 1.5
-                            }}
-                        >
-                            Save
                         </Button>
                     </Box>
                 </Box>

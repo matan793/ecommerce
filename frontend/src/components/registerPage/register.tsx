@@ -1,34 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper, Container } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper, Container, Stepper, Step, StepLabel } from '@mui/material';
+import { Grid } from '@mui/material';
 import { apiClient } from '../../api/api';
 import { Link, useNavigate } from 'react-router';
-import Navbar from '../Navbar/Navbar';
-
-const bannerStyle: React.CSSProperties = {
-    width: '100%',
-    height: '180px',
-    background: 'linear-gradient(90deg, #fddfa1 0%, #FFF8DC 100%)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '32px',
-    borderRadius: '16px',
-    boxShadow: '0 4px 24px rgba(255, 215, 0, 0.2)',
-    overflow: 'hidden'
-};
 
 const RegisterPage: React.FC = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [birthdate, setBirthdate] = useState('');
-    const [password, setPassword] = useState('');
+    const [step, setStep] = useState(0);
+
+    const [form, setForm] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        birthdate: '',
+        password: '',
+        street: '',
+        city: '',
+        country: '',
+        postalCode: '',
+    });
+
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Disable scrolling only on this page
     useEffect(() => {
         const original = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
@@ -37,7 +32,12 @@ const RegisterPage: React.FC = () => {
         };
     }, []);
 
-    const validate = () => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const validateStep1 = () => {
+        const { firstName, lastName, email, birthdate, password, phone } = form;
         if (!firstName || !lastName || !email || !birthdate || !password) {
             setError('All fields except phone number are required.');
             return false;
@@ -54,17 +54,33 @@ const RegisterPage: React.FC = () => {
         return true;
     };
 
+    const validateStep2 = () => {
+        const { street, city, country, postalCode } = form;
+        if (!street || !city || !country || !postalCode) {
+            setError('All address fields are required.');
+            return false;
+        }
+        setError(null);
+        return true;
+    };
+
     const handleRegister = async () => {
-        if (!validate()) return;
         setLoading(true);
         try {
             const response = await apiClient.post('/auth/register', {
-                firstName,
-                lastName,
-                email,
-                phone: phone || null,
-                birthdate,
-                password,
+                firstName: form.firstName,
+                lastName: form.lastName,
+                email: form.email,
+                phoneNumber: form.phone || null,
+                birthdate: form.birthdate,
+                password: form.password,
+                address: {
+                    street: form.street,
+                    city: form.city,
+                    country: form.country,
+                    postalCode: form.postalCode,
+                },
+                
             });
             if (response.status === 201) {
                 navigate('/login');
@@ -81,131 +97,203 @@ const RegisterPage: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleNext = (e: React.FormEvent) => {
         e.preventDefault();
-        handleRegister();
+        if (step === 0 && validateStep1()) {
+            setStep(1);
+        } else if (step === 1 && validateStep2()) {
+            handleRegister();
+        }
+    };
+
+    const handleBack = () => {
+        setStep(0);
+        setError(null);
     };
 
     return (
-        <>
-            <Navbar />
-            <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
-                bgcolor="#f5f5f5"
-                sx={{
-                    background: 'linear-gradient(120deg, #fffbe6 0%, #f5e6ca 100%)',
-                    overflow: 'hidden',
-                }}
-            >
-                <Container maxWidth="xs" sx={{ mt: 0 }}>
-                    <Paper
-                        elevation={6}
-                        sx={{
-                            padding: 4,
-                            minWidth: 340,
-                            borderRadius: 4,
-                            background: 'rgba(255,255,255,0.95)',
-                            boxShadow: '0 8px 32px rgba(218,165,32,0.10)',
-                        }}
-                    >
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                label="First Name"
-                                fullWidth
-                                margin="normal"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                required
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            <TextField
-                                label="Last Name"
-                                fullWidth
-                                margin="normal"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                required
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            <TextField
-                                label="Email"
-                                type="email"
-                                fullWidth
-                                margin="normal"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            <TextField
-                                label="Phone Number"
-                                type="tel"
-                                fullWidth
-                                margin="normal"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                                placeholder="+123456789"
-                            />
-                            <TextField
-                                label="Birthdate"
-                                type="date"
-                                fullWidth
-                                margin="normal"
-                                value={birthdate}
-                                onChange={(e) => setBirthdate(e.target.value)}
-                                required
-                              
-                                slotProps={{inputLabel: { shrink: true }}}
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            <TextField
-                                label="Password"
-                                type="password"
-                                fullWidth
-                                margin="normal"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            {error && (
-                                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                                    {error}
-                                </Typography>
+        <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            bgcolor="#f5f5f5"
+            sx={{
+                background: 'linear-gradient(120deg, #fffbe6 0%, #f5e6ca 100%)',
+                overflow: 'hidden',
+            }}
+        >
+            <Container maxWidth="sm" sx={{ mt: 0 }}>
+                <Paper
+                    elevation={6}
+                    sx={{
+                        padding: { xs: 2, sm: 4 },
+                        minWidth: { xs: 0, sm: 420 },
+                        borderRadius: 4,
+                        background: 'rgba(255,255,255,0.95)',
+                        boxShadow: '0 8px 32px rgba(218,165,32,0.10)',
+                    }}
+                >
+                    <Stepper activeStep={step} alternativeLabel sx={{ mb: 3 }}>
+                        <Step>
+                            <StepLabel>Account Info</StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel>Address</StepLabel>
+                        </Step>
+                    </Stepper>
+                    <form onSubmit={handleNext}>
+                        {step === 0 && (
+                            <Grid container spacing={2}>
+                                <Grid>
+                                    <TextField
+                                        label="First Name"
+                                        name="firstName"
+                                        fullWidth
+                                        value={form.firstName}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid>
+                                    <TextField
+                                        label="Last Name"
+                                        name="lastName"
+                                        fullWidth
+                                        value={form.lastName}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid>
+                                    <TextField
+                                        label="Email"
+                                        name="email"
+                                        type="email"
+                                        fullWidth
+                                        value={form.email}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        label="Phone Number"
+                                        name="phone"
+                                        type="tel"
+                                        fullWidth
+                                        value={form.phone}
+                                        onChange={handleChange}
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                        placeholder="+123456789"
+                                    />
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        label="Birthdate"
+                                        name="birthdate"
+                                        type="date"
+                                        fullWidth
+                                        value={form.birthdate}
+                                        onChange={handleChange}
+                                        required
+                                        InputLabelProps={{ shrink: true }}
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        label="Password"
+                                        name="password"
+                                        type="password"
+                                        fullWidth
+                                        value={form.password}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+                        {step === 1 && (
+                            <Grid container spacing={2}>
+                                <Grid >
+                                    <TextField
+                                        label="Street"
+                                        name="street"
+                                        fullWidth
+                                        value={form.street}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        label="City"
+                                        name="city"
+                                        fullWidth
+                                        value={form.city}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        label="Country"
+                                        name="country"
+                                        fullWidth
+                                        value={form.country}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        label="Postal Code"
+                                        name="postalCode"
+                                        fullWidth
+                                        value={form.postalCode}
+                                        onChange={handleChange}
+                                        required
+                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+                        {error && (
+                            <Typography color="error" variant="body2" sx={{ mt: 2 }}>
+                                {error}
+                            </Typography>
+                        )}
+                        <Box display="flex" justifyContent="space-between" mt={4}>
+                            {step === 1 && (
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={handleBack}
+                                    sx={{ borderRadius: 2, px: 4 }}
+                                    disabled={loading}
+                                >
+                                    Back
+                                </Button>
                             )}
+                            <Box flex={1} />
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                fullWidth
                                 sx={{
-                                    mt: 3,
                                     fontWeight: 'bold',
                                     fontSize: '1rem',
                                     py: 1.2,
+                                    px: 4,
                                     borderRadius: 2,
                                     background: 'linear-gradient(90deg, #fddfa1 0%, #ffe082 100%)',
                                     color: '#6d4c00',
@@ -216,23 +304,27 @@ const RegisterPage: React.FC = () => {
                                 }}
                                 disabled={loading}
                             >
-                                {loading ? 'Registering...' : 'Register'}
+                                {loading
+                                    ? 'Registering...'
+                                    : step === 0
+                                    ? 'Next'
+                                    : 'Register'}
                             </Button>
-                        </form>
-                                                <Typography
-                            variant="body2"
-                            align="center"
-                            sx={{ mt: 2 }}
-                        >
-                            have a user?{' '}
-                            <Link to="/login" style={{ color: '#6d4c00', fontWeight: 'bold', textDecoration: 'underline' }}>
-                                Login here
-                            </Link>
-                        </Typography>
-                    </Paper>
-                </Container>
-            </Box>
-        </>
+                        </Box>
+                    </form>
+                    <Typography
+                        variant="body2"
+                        align="center"
+                        sx={{ mt: 2 }}
+                    >
+                        have a user?{' '}
+                        <Link to="/login" style={{ color: '#6d4c00', fontWeight: 'bold', textDecoration: 'underline' }}>
+                            Login here
+                        </Link>
+                    </Typography>
+                </Paper>
+            </Container>
+        </Box>
     );
 };
 
