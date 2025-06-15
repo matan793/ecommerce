@@ -26,12 +26,12 @@ export class User {
 
     @Column({
         unique: true,
-        nullable: false,
+        nullable: true,
     })
     email: string;
 
     @Column({
-        nullable: false
+        nullable: true
     })
     password: string;
 
@@ -53,10 +53,13 @@ export class User {
     @OneToMany(() => Cart, cart => cart.user)
     cart: Cart[];
 
-    @OneToOne(() => Address, address => address.user, { cascade: true, eager: true })
-    @JoinColumn({name: "address_id"})
+    @OneToOne(() => Address, address => address.user, { cascade: true, eager: true, nullable: true })
+    @JoinColumn({ name: "address_id" })
     address: Address;
 
     @OneToMany(() => Order, (order: Order) => order.user)
-    orders: Order[]
+    orders: Order[];
+
+    @Column({ nullable: true, unique: true }) 
+    googleId: string;
 }

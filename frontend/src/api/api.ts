@@ -82,11 +82,28 @@ export const api = {
     },
     placeOrder: async (order: OrderType) => {
         try {
-            const response = await apiClient.post('order/place', {
+            const response = await apiClient.post('orders/place', {
                 ...order
             })
         } catch (error) {
-            
+            throw error;
+        }
+    },
+    deleteCart: async () => {
+        try {
+            const response = await apiClient.delete('cart/all');
+        } catch (error) {
+            throw error;
+        }
+    },
+    loginWithGoogle: async (credential: string | undefined) => {
+        try {
+            const response = await apiClient.post('auth/google', {
+                token: credential
+            })
+            return response.data;
+        } catch (error) {
+            throw error;
         }
     }
 };

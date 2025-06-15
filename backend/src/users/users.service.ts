@@ -6,10 +6,16 @@ import { userAuth } from 'src/utils/DTO/userAuth';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
+
+
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>
     ) { }
+
+    async findByGoogleId(googleId: string) {
+        return this.userRepository.findOne({ where: { googleId } })
+    }
 
     async findByEmailAndPass(userAuth: userAuth): Promise<User | null> {
 
@@ -39,18 +45,19 @@ export class UsersService {
 
     async create(user: DeepPartial<User>): Promise<User> {
         const newUser = this.userRepository.create(user);
-        newUser.password = await bcrypt.hash(newUser.password, 10); // Hash the password before saving
+        if (newUser.password) {
+            newUser.password = await bcrypt.hash(newUser.password, 10);
+        }
         return await this.userRepository.save(newUser);
     }
 
-    async saveUserByID(userId: number, user: DeepPartial<User>){
-        const existingUser = await this.userRepository.findOne({ where: { userId} });
-        
-         
+    async saveUserByID(userId: number, user: DeepPartial<User>) {
+        const existingUser = await this.userRepository.findOne({ where: { userId } });
+
+
         if (!existingUser) {
             throw new NotFoundException(`User with ID ${userId} not found`);
         }
-        return await this.userRepository.update({userId}, user)
+        return await this.userRepository.update({ userId }, user)
     }
 }
- 

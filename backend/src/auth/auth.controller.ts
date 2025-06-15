@@ -72,4 +72,17 @@ export class AuthController {
         return { message: 'Registration successful' };
     }
 
+    @Post('google')
+    async loginWithGoogle(@Body('token') token: string, @Res({ passthrough: true }) res: Response) {
+        const { token: jwtToken, user } = await this.authService.validateGoogleToken(token);
+
+        res.cookie('access_token', (await this.authService.login(user)).access_token, {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production',
+        });
+
+        return await this.userService.findById(user.userId);
+    }
+
 }

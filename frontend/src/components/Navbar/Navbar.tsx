@@ -2,8 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, FormGroup, FormControlLabel, Menu, MenuItem, Switch, } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useUser } from '../../contexts';
-import { apiClient } from '../../api/api';
+import { useUser } from '../../contexts/userContext';
 import { Link, useNavigate } from 'react-router';
 
 interface NavbarMenuItem {
@@ -12,7 +11,7 @@ interface NavbarMenuItem {
 }
 
 interface NavbarProps {
-    menuButtonCallback?: () => void;
+    menuButtonCallback?: () => void; 
     menuItems?: NavbarMenuItem[];
 }
 

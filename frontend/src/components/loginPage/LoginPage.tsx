@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Typography, Paper, Container } from '@mui/material';
-import { apiClient } from '../../api/api';
-import { useUser } from '../../contexts';
+import { api, apiClient } from '../../api/api';
+import { useUser } from '../../contexts/userContext';
 import { Link, useNavigate } from 'react-router';
 import Navbar from '../Navbar/Navbar';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
 
 const bannerStyle: React.CSSProperties = {
     width: '100%',
@@ -72,6 +74,20 @@ const LoginPage: React.FC = () => {
         handleLogin();
     };
 
+    const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
+        try {
+            const data = await api.loginWithGoogle(credentialResponse.credential);
+            setUser(data);
+            navigate('/');
+            fetchUser();
+            console.log(data);
+
+        } catch (error) {
+            toast.error('error with google login');
+            console.log(error);
+        }
+    }
+
     return (
         <>
             {/* <Navbar /> */}
@@ -99,7 +115,7 @@ const LoginPage: React.FC = () => {
                             boxShadow: '0 8px 32px rgba(218,165,32,0.10)',
                         }}
                     >
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
                             <TextField
                                 label="Email"
                                 type="email"
@@ -155,6 +171,12 @@ const LoginPage: React.FC = () => {
                                 {loading ? 'Logging in...' : 'Login'}
                             </Button>
                         </form>
+                        <GoogleLogin
+                            onSuccess={handleGoogleLogin}
+                            onError={() => {
+                                console.log('Login Failed');
+                            }}
+                        />
                         <Typography
                             variant="body2"
                             align="center"

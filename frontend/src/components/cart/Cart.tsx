@@ -20,7 +20,7 @@ interface CartProps {
     onPurchaceNow: () => void;
 }
 
-const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity }) => {
+const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity, onPurchaceNow }) => {
     const totalAmount = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
     return (
         <Drawer
@@ -59,6 +59,7 @@ const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity }) =
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
                         <Button
+                        onClick={() => {onPurchaceNow()}}
                             fullWidth
                             variant="contained"
                             sx={{

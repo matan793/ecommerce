@@ -1,14 +1,15 @@
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtConstant } from '../../SECRET/secret';
 import { Request } from 'express';
 import { JwtPayload } from 'src/utils/types/jwtPayload';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly userService: UsersService,) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors(
         [
@@ -22,13 +23,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<{ userId: number }> {
-    return { userId: payload.sub };
+    const user = await this.userService.findById(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return user;
   }
 
+
   private static extractJWT(req: Request): string | null {
-    if (req.cookies && 'access_token' in req.cookies && req.cookies.access_token.length > 0) {
-      return req.cookies.access_token;
-    }
-    return null;
+  if (req.cookies && 'access_token' in req.cookies && req.cookies.access_token.length > 0) {
+    return req.cookies.access_token;
   }
+  return null;
+}
 }

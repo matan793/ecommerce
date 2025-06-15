@@ -39,6 +39,7 @@ const HomePage: React.FC = () => {
   const { products } = useProducts();
   const { brands } = useBrands();
   const { categories } = useCategories();
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null)
   const [filter, setFilter] = useState<filterOptions>({
     brand: 'All',
     category: 'All',

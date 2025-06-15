@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/products/product.entity';
 import { Cart } from './cart.entity';
 import { Repository } from 'typeorm';
+import { ADDRGETNETWORKPARAMS } from 'dns';
 
 @Injectable()
 export class CartService {
@@ -37,6 +38,10 @@ export class CartService {
             return await this.cartRepository.save(newCart);
             // return await this.cartRepository.save(newCart);
         }
+    }
+
+    async deleteAllUserProducts(userId: number) {
+        return await this.cartRepository.delete({userId})
     }
 
 }

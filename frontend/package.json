@@ -19,6 +19,7 @@
     "@mui/icons-material": "^7.1.1",
     "@mui/joy": "^5.0.0-beta.52",
     "@mui/material": "^7.1.1",
+    "@react-oauth/google": "^0.12.2",
     "axios": "^1.9.0",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",

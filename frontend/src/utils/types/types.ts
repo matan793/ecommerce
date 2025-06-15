@@ -5,8 +5,14 @@ export interface UserType {
     lastName: string;
     phoneNumber?: string;
     cart: CartItemType[];
+    role: UserRole;
     address: AddressType;
     createdAt: Date;
+}
+
+export enum UserRole{
+    admin='admin',
+    user='user'
 }
 export interface BrandType {
     id: number;
@@ -32,7 +38,7 @@ export interface CartItemType {
     product: ProductType;
 }
 export interface ProductType {
-    productId: string;
+    productId: number;
     name: string;
     brand: BrandType;
     price: number;

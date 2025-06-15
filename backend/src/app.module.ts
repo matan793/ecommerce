@@ -11,6 +11,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -32,7 +33,8 @@ import { PaymentsModule } from './payments/payments.module';
     CategoriesModule,
     CartModule,
     OrdersModule,
-    PaymentsModule],
+    PaymentsModule,
+    AdminModule],
   //controllers: [AppController],
   providers: [AppService],
 })
