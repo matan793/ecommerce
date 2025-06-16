@@ -1,9 +1,9 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, FormGroup, FormControlLabel, Menu, MenuItem, Switch, } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '../../contexts/userContext';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
+import { UserRole } from '../../utils/types/types';
 
 interface NavbarMenuItem {
     title: string;
@@ -11,7 +11,7 @@ interface NavbarMenuItem {
 }
 
 interface NavbarProps {
-    menuButtonCallback?: () => void; 
+    menuButtonCallback?: () => void;
     menuItems?: NavbarMenuItem[];
 }
 
@@ -69,19 +69,19 @@ const Navbar: React.FC<NavbarProps> = ({ menuButtonCallback, menuItems }) => {
     </div>);
 
     const notLoggedIn = () => (
-                            <><Typography variant = "body1" sx = {{ flexGrow: 1, textAlign: 'right' }}>
-                    <Button color="inherit" onClick={() => { navigate('/login'); }}>
-                        Login
-                    </Button>
-                </Typography><Typography variant="body1" sx={{ textAlign: 'right' }}>
-                    <Button color="inherit" onClick={() => { navigate('/register'); }}>
-                        register
-                    </Button>
-                </Typography></>
+        <><Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>
+            <Button color="inherit" onClick={() => { navigate('/login'); }}>
+                Login
+            </Button>
+        </Typography><Typography variant="body1" sx={{ textAlign: 'right' }}>
+                <Button color="inherit" onClick={() => { navigate('/register'); }}>
+                    register
+                </Button>
+            </Typography></>
     )
 
     const handleLoad = () => {
-        if(loading) 
+        if (loading)
             return <Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>Loading...</Typography>;
         else if (user) {
             return profile();
@@ -101,9 +101,20 @@ const Navbar: React.FC<NavbarProps> = ({ menuButtonCallback, menuItems }) => {
                     <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/brands') }} >
                         Brands
                     </Button>
-                     {user ? (profile()) : (notLoggedIn())}
+                    {(user && user.role === UserRole.admin) &&
+                        (
+                            <>
+                                <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/admin/products') }} >
+                                    Menage Products
+                                </Button>
+                                <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/admin/orders') }} >
+                                    Menage Orders
+                                </Button>
+                            </>
+                        )}
+                    {user ? (profile()) : (notLoggedIn())}
 
-        </Toolbar >
+                </Toolbar >
             </AppBar >
         </>
     );

@@ -40,27 +40,29 @@ CREATE TYPE ecommerce.gender as ENUM(
 'unisex'
 );
 
-CREATE TABLE ecommerce.users(
-	user_id SERIAL PRIMARY KEY,
-	first_name TEXT NOT NULL,
-	last_name TEXT NOT NULL,
-	birthdate DATE NOT NULL,
-	email TEXT UNIQUE NOT NULL CHECK (email ~*  '^[^@]+@[^@]+\.[^@]+$'),
-	password TEXT NOT NULL,
-	role ecommerce.USER_ROLE NOT NULL DEFAULT 'user',
-	phone_number TEXT,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE ecommerce.addresses(
 	address_id SERIAL PRIMARY KEY,
-	user_id INTEGER REFERENCES ecommerce.users(user_id) ON DELETE CASCADE,
-	name TEXT NOT NULL,
 	street TEXT NOT NULL,
 	city TEXT NOT NULL,
 	country text NOT NULL,
 	postal_code TEXT NOT NULL
 );
+
+CREATE TABLE ecommerce.users(
+	user_id SERIAL PRIMARY KEY,
+	first_name TEXT NOT NULL,
+	last_name TEXT NOT NULL,
+	birthdate DATE ,
+	address_id INTEGER REFERENCES ecommerce.addresses(address_id),
+	email TEXT UNIQUE CHECK (email ~*  '^[^@]+@[^@]+\.[^@]+$'),
+	google_id TEXT UNIQUE,
+	password TEXT,
+	role ecommerce.USER_ROLE NOT NULL DEFAULT 'user',
+	phone_number TEXT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 
 CREATE TABLE ecommerce.categories (
     category_id SERIAL PRIMARY KEY,
@@ -71,7 +73,8 @@ CREATE TABLE ecommerce.categories (
 CREATE TABLE ecommerce.brands (
 	brand_id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL UNIQUE,
-	description TEXT
+	description TEXT,
+	image_url TEXT
 );
 
 CREATE TABLE ecommerce.products (
@@ -103,13 +106,14 @@ CREATE TABLE ecommerce.order_items (
     unit_price NUMERIC(10, 2) NOT NULL -- snapshot of price at time of purchase
 );
 
+
 CREATE TABLE ecommerce.payments (
     payment_id SERIAL PRIMARY KEY,
     order_id INTEGER REFERENCES ecommerce.orders(order_id) ON DELETE CASCADE,
     payment_method ecommerce.PAYMENT_METHOD NOT NULL, -- todo::: enum
     payment_status ecommerce.PAYMENT_STATUS DEFAULT 'pending', -- enum
     amount NUMERIC(10, 2) NOT NULL,
-    pa_id_at TIMESTAMP
+    paid_at TIMESTAMP
 );
 
 CREATE TABLE ecommerce.cart(
@@ -129,15 +133,6 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
--- USERS
-INSERT INTO ecommerce.users (user_id, first_name, last_name, birthdate, email, password, role, phone_number, created_at) VALUES
-(default, 'Alice', 'Johnson', '1990-05-12', 'alice.johnson@example.com', 'hashed_password1', 'user', '1234567890', '2023-06-01'),
-(default, 'Bob', 'Smith', '1985-03-23', 'bob.smith@example.com', 'hashed_password2', 'user', '0987654321', '2023-06-02');
-
--- ADDRESSES
-INSERT INTO ecommerce.addresses (address_id, user_id, name, street, city, country, postal_code) VALUES
-(default, 1, 'Alice Home', '123 Main St', 'New York', 'USA', '10001'),
-(default, 2, 'Bob Office', '456 Elm St', 'Los Angeles', 'USA', '90001');
 
 -- CATEGORIES
 INSERT INTO ecommerce.categories (category_id, name, description) VALUES
@@ -147,12 +142,12 @@ INSERT INTO ecommerce.categories (category_id, name, description) VALUES
 (default, 'Spicy', 'Cinnamon, cardamom, pepper, clove. Can be warm or sharp; often in fall/winter scents');
 
 -- BRANDS
-INSERT INTO ecommerce.brands (brand_id, name, description) VALUES
-(default, 'Dior', 'Christian Dior is a luxury fashion house known for iconic fragrances.'),
-(default, 'Chanel', 'Chanel is a French luxury brand with legendary perfumes.'),
-(default, 'Creed', 'Creed is a niche perfume house with historic roots.'),
-(default, 'Yves Saint Laurent', 'YSL creates fashion-forward fragrances.'),
-(default, 'Tom Ford', 'Tom Ford designs luxurious, bold scents.');
+INSERT INTO ecommerce.brands (brand_id, name, description, image_url) VALUES
+(default, 'Dior', 'Christian Dior is a luxury fashion house known for iconic fragrances.', 'https://assets-us-01.kc-usercontent.com/9e9a95c0-1d15-00d5-e878-50f070203f13/0ea56f82-5538-4ede-bb6a-f03edb8f5f6a/dior-couture-logo-2.jpg'),
+(default, 'Chanel', 'Chanel is a French luxury brand with legendary perfumes.', 'https://upload.wikimedia.org/wikipedia/en/thumb/9/92/Chanel_logo_interlocking_cs.svg/1200px-Chanel_logo_interlocking_cs.svg.png'),
+(default, 'Creed', 'Creed is a niche perfume house with historic roots.', 'https://m.media-amazon.com/images/I/61BybqC2fUL._UF894,1000_QL80_.jpg'),
+(default, 'Yves Saint Laurent', 'YSL creates fashion-forward fragrances.', 'https://yslculc.wordpress.com/wp-content/uploads/2015/07/yves-saint-laurent-logo-vector.png'),
+(default, 'Tom Ford', 'Tom Ford designs luxurious, bold scents.', 'https://www.degruchys.com/media/6147/tom-ford-logo.png');
 
 -- PRODUCTS
 INSERT INTO ecommerce.products (product_id, name, description, brand_id, price, image_url, stock_quantity, category_id) VALUES
@@ -162,30 +157,18 @@ INSERT INTO ecommerce.products (product_id, name, description, brand_id, price, 
 (default, 'YSL Black Opium', 'Sweet, coffee-flavored women’s perfume.', 4, 125.00, 'https://img.ksp.co.il/item/41848/b_5.jpg', 35, 2),
 (default, 'Tom Ford Oud Wood', 'Rich, woody unisex fragrance.', 5, 250.00, 'https://kolboyehuda.co.il/wp-content/uploads/2021/11/1229-bwsm-ywnysqs-twm-pwrd-wd-wwd-dp-50-ml-Tom-Ford-Oud-Wood-Eau-De-Parfum-50-Ml.jpg', 30, 3);
 
--- ORDERS
-INSERT INTO ecommerce.orders (order_id, user_id, address_id, status, total_amount, created_at) VALUES
-(default, 1, 1, 'delivered', 110.00, '2023-06-03'),
-(default, 2, 2, 'processing', 375.00, '2023-06-04');
-
--- ORDER ITEMS
-INSERT INTO ecommerce.order_items (id, order_id, product_id, quantity, unit_price) VALUES
-(default, 1, 1, 1, 110.00),
-(default, 2, 3, 1, 345.00),
-(default, 2, 4, 1, 125.00);
-
--- PAYMENTS
-INSERT INTO ecommerce.payments (payment_id, order_id, payment_method, payment_status, amount, pa_id_at) VALUES
-(default, 1, 'credit_card', 'approved', 110.00, '2023-06-03'),
-(default, 2, 'paypal', 'pending', 375.00, NULL);
 
 -- CART
-INSERT INTO ecommerce.cart (user_id, product_id, quantity) VALUES
-(1, 2, 1),
-(2, 5, 2);
+-- INSERT INTO ecommerce.cart (user_id, product_id, quantity) VALUES
+-- (2, 2, 1),
+-- (2, 5, 2);
 
--- REVIEWS
-INSERT INTO ecommerce.reviews (review_id, user_id, product_id, rating, comment, created_at) VALUES
-(default, 1, 1, 5, 'Amazing fragrance, long-lasting!', '2023-06-05'),
-(default, 2, 3, 4, 'Smells great but a bit pricey.', '2023-06-06');
+-- select * from ecommerce.orders
+-- -- REVIEWS
+-- INSERT INTO ecommerce.reviews (review_id, user_id, product_id, rating, comment, created_at) VALUES
+-- (default, 1, 1, 5, 'Amazing fragrance, long-lasting!', '2023-06-05'),
+-- (default, 2, 3, 4, 'Smells great but a bit pricey.', '2023-06-06');
 
--- SELECT setval('ecommerce.users_user_id_seq', (SELECT MAX(user_id) FROM ecommerce.users));
+-- -- SELECT setval('ecommerce.users_user_id_seq', (SELECT MAX(user_id) FROM ecommerce.users));
+
+select * from ecommerce.users;

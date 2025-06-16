@@ -17,7 +17,7 @@ export class Address {
 
     @Column({ type: 'text' })
     country: string;
-
+ 
     @Column({ type: 'text', name: 'postal_code' }) 
     postalCode: string;
 
@@ -26,4 +26,4 @@ export class Address {
 
     @OneToMany(() => Order, (order: Order) => order.address)
     orders: Order[]
-}
+} 

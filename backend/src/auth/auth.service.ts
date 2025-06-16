@@ -47,13 +47,13 @@ export class AuthService {
         const { sub: googleId, email, name, picture, family_name } = payload;
 
         let user = await this.usersService.findByGoogleId(googleId);
-        console.log('found user: ', user);
         
         if (!user) {
             const partialUser: DeepPartial<User> = {
                 googleId,
                 firstName: name,
                 lastName: family_name,
+                email
             } 
             user = await this.usersService.create(partialUser);
         }

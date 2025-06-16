@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { DeepPartial, Not, Repository } from 'typeorm';
 import { userAuth } from 'src/utils/DTO/userAuth';
+import { Address } from 'src/addresses/addresses.entity';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
@@ -51,13 +52,29 @@ export class UsersService {
         return await this.userRepository.save(newUser);
     }
 
-    async saveUserByID(userId: number, user: DeepPartial<User>) {
-        const existingUser = await this.userRepository.findOne({ where: { userId } });
-
-
-        if (!existingUser) {
+    async saveUserByID(userId: number, userData: DeepPartial<User>) {
+        const user = await this.findById(userId);
+        if (!user) {
             throw new NotFoundException(`User with ID ${userId} not found`);
         }
-        return await this.userRepository.update({ userId }, user)
+
+        // Handle address separately
+        if (userData.address) {
+            const addressRepository = this.userRepository.manager.getRepository(Address);
+            if (user.address) {
+                // Update existing address
+                await addressRepository.update(user.address.addressId, userData.address);
+            } else {
+                const newAddress = addressRepository.create(userData.address);
+                const savedAddress: Address = await addressRepository.save(newAddress);
+                user.address = savedAddress;
+            }
+            delete userData.address; // Remove address from userData
+        }
+
+        // Update user properties
+        Object.assign(user, userData);
+        user.userId = userId;
+        return await this.userRepository.save(user);
     }
 }

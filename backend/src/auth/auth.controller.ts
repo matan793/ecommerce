@@ -46,7 +46,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     async getUser(@Request() { user }: { user: User }) {
 
-        const { role: __, password: _, ...safeUser } = await this.userService.findById(user.userId);
+        const {password: _, ...safeUser } = await this.userService.findById(user.userId);
         return safeUser;
     }
 

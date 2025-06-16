@@ -33,8 +33,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             }
         } catch (err) {
             setUser(null);
-            toast.error('somthing went wrong in login in, try again later')
-
         } finally {
             setLoading(false);
         }

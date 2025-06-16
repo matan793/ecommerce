@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import ParfumeCard from './components/parfumeCard/parfumeCard'
-import LoginPage from './components/loginPage/LoginPage'
-import HomePage from './components/HomePage'
 import './App.css'
 import { useUser } from './contexts/userContext'
 import { useBuyMode } from './contexts/buyModeContext'
@@ -24,7 +21,6 @@ function App() {
   const navigate = useNavigate();
   const { selectedProduct, setSelectedProduct } = useSelectedProduct();
   const { mode, setMode } = useBuyMode()
-  //const [open, setOpen] = useState<boolean>(false);
   const {open, setOpen} = useModalOpen()
   const handleLogout = async () => {
     try {
@@ -87,6 +83,7 @@ function App() {
       toast.error('Failed to place order');
     }
   };
+console.log(user);
 
   return (
     <>

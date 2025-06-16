@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../api/api";
+import { CategoryType } from "../utils/types/types";
 
-export interface CategoryType {
-  id: string;
-  name: string;
-}
+
 
 export const useCategories = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);

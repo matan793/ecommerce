@@ -1,7 +1,7 @@
 import { Address } from "src/addresses/addresses.entity";
 import { Cart } from "src/cart/cart.entity";
 import { Order } from "src/orders/orders.entity";
-import { userRoles } from "src/utils/types/userRoles";
+import { UserRoles } from "src/utils/types/userRoles";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('users')
@@ -37,10 +37,10 @@ export class User {
 
     @Column({
         type: 'enum',
-        enum: userRoles,
-        default: userRoles.user
+        enum: UserRoles,
+        default: UserRoles.user
     })
-    role: userRoles;
+    role: UserRoles;
 
     @Column()
     phoneNumber: string;

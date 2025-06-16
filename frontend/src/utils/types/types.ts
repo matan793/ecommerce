@@ -4,9 +4,11 @@ export interface UserType {
     firstName: string;
     lastName: string;
     phoneNumber?: string;
+    googleId: string;
     cart: CartItemType[];
     role: UserRole;
     address: AddressType;
+    birthdate: Date;
     createdAt: Date;
 }
 
@@ -15,10 +17,11 @@ export enum UserRole{
     user='user'
 }
 export interface BrandType {
-    id: number;
+    brandId: number;
     name: string;
     description?: string;
     poducts: ProductType[];
+    imageUrl: string;
 }
 
 export enum ParfumeGenderType {

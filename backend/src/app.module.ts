@@ -12,6 +12,7 @@ import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AdminModule } from './admin/admin.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -34,7 +35,8 @@ import { AdminModule } from './admin/admin.module';
     CartModule,
     OrdersModule,
     PaymentsModule,
-    AdminModule],
+    AdminModule,
+    CloudinaryModule],
   //controllers: [AppController],
   providers: [AppService],
 })
