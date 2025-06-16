@@ -3,6 +3,7 @@ import { Box, TextField, Button, Paper, Typography, Grid, MenuItem } from '@mui/
 import { BrandType, CategoryType } from '../../../utils/types/types';
 import { toast } from 'react-toastify';
 import { apiClient } from '../../../api/api';
+import { useProducts } from '../../../hooks/useProducts';
 
 interface ProductCreateFormProps {
     brands: BrandType[];
@@ -21,6 +22,7 @@ const initialForm = {
 const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categories }) => {
     const [form, setForm] = useState(initialForm);
     const [file, setFile] = useState<File | null>(null);
+    const {fetchProducts} = useProducts();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -56,6 +58,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
             toast.success('Product created!');
             setForm(initialForm);
             setFile(null);
+            fetchProducts();
         } catch (error) {
             toast.error('Failed to create product');
             console.log(error);
@@ -70,16 +73,16 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
             </Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid >
                         <TextField label="Name" name="name" value={form.name} onChange={handleChange} fullWidth required />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid >
                         <TextField label="Price" name="price" type="number" value={form.price} onChange={handleChange} fullWidth required />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid>
                         <TextField label="Description" name="description" value={form.description} onChange={handleChange} fullWidth multiline minRows={2} />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid >
                         <TextField
                             select
                             label="Brand"
@@ -90,13 +93,13 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             required
                         >
                             {brands.map((brand) => (
-                                <MenuItem key={brand} value={brand.brandId}>
+                                <MenuItem key={brand.brandId} value={brand.brandId}>
                                     {brand.name}
                                 </MenuItem>
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid >
                         <TextField
                             select
                             label="Category"
@@ -113,7 +116,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid >
                         <TextField
                             label="Stock Quantity"
                             name="stockQuantity"
@@ -124,7 +127,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             required
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid >
                         <Button
                             variant="contained"
                             component="label"
@@ -152,7 +155,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             />
                         </Button>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid>
                         <Button
                             type="submit"
                             variant="contained"

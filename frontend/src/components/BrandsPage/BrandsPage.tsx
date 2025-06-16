@@ -63,7 +63,7 @@ const BrandsPage: React.FC = () => {
 
                 <Grid container spacing={3}>
                     {brands.map((brand) => (
-                        <Grid key={brand.id}>
+                        <Grid key={brand.brandId}>
                             <BrandCard
                                 brand={brand}
                                 onClick={handleBrandClick}

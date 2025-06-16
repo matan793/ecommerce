@@ -20,7 +20,7 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({ products, admin }) => {
           </ParfumeCard>
         </Grid>
       ))}
-    </Grid>
+    </Grid> 
   );
 };
 

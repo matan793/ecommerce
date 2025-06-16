@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -37,11 +37,14 @@ export class ProductsController {
         // Parse the product string to object
         const productData: ProductDTO = JSON.parse(productString);
 
-        // Upload image if exists
-        if (file) {
-            const url = await this.cloudinaryService.uploadImageFromBuffer(file);
-            productData.imageUrl = url;
+        if (!file) {
+            throw new BadRequestException('request must contain image');
         }
+
+        // Upload image if exists
+        const url = await this.cloudinaryService.uploadImageFromBuffer(file);
+        productData.imageUrl = url;
+
 
         return await this.productService.create(productData);
     }

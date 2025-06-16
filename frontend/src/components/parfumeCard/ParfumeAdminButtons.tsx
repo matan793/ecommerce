@@ -4,6 +4,9 @@ import { Button } from '@mui/material';
 import React from 'react';
 import { useUser } from '../../contexts/userContext';
 import { ProductType } from '../../utils/types/types';
+import { toast } from 'react-toastify';
+import { api } from '../../api/api';
+import { useProducts  } from '../../hooks/useProducts';
 
 const styles = {
     actions: { display: 'flex', gap: 12, marginTop: 16 },
@@ -15,13 +18,19 @@ interface ParfumAdminButtonsProps {
 const ParfumAdminButtons: React.FC<ParfumAdminButtonsProps> = ({ product }: ParfumAdminButtonsProps) => {
 
     const { fetchUser } = useUser();
+    const {fetchProducts} = useProducts();
 
     function handleEdit(event: React.MouseEvent<HTMLButtonElement>): void {
         throw new Error('Function not implemented.');
     }
 
-    function handleDelete(event: React.MouseEvent<HTMLButtonElement>): void {
-        throw new Error('Function not implemented.');
+    const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        try {
+            await api.deleteProduct(product.productId);
+            fetchProducts();
+        } catch (error) {
+            toast.error('error in deleting')
+        }
     }
 
     return (

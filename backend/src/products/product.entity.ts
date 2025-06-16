@@ -51,9 +51,9 @@ export class Product {
     @JoinColumn({ name: 'category_id' })
     category: Category;
 
-    @OneToMany(() => Cart, cart => cart.product)
+    @OneToMany(() => Cart, cart => cart.product, {onDelete: "CASCADE"})
     cartItems: Cart[];
 
-    @OneToMany(() => OrderItem, orderItem => orderItem.product)
+    @OneToMany(() => OrderItem, orderItem => orderItem.product, {onDelete: "CASCADE"})
     orderItems: OrderItem[];
-} 
+}  

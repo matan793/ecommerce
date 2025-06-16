@@ -16,7 +16,7 @@ import BrandsPage from './components/BrandsPage/BrandsPage.tsx'
 import AdminRoute from './routes/Admin/AdminRoute.tsx'
 import ProfilePage from './components/ProfilePage/ProfilePage.tsx'
 import MenageProducts from './components/AdminPage/MenageProducts/MenageProducts.tsx'
-
+import { ProductsProvider } from './hooks/useProducts.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -48,15 +48,17 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId="396064184331-89oe1f3pak830r7k1q1ief38n16eftvd.apps.googleusercontent.com">
-      <UserProvider>
-        <ModalOpenProvider>
-          <SelectedProductProvider>
-            <BuyModeProvider>
-              <RouterProvider router={router} />
-            </BuyModeProvider>
-          </SelectedProductProvider>
-        </ModalOpenProvider>
-      </UserProvider >
+      <ProductsProvider>
+        <UserProvider>
+          <ModalOpenProvider>
+            <SelectedProductProvider>
+              <BuyModeProvider>
+                <RouterProvider router={router} />
+              </BuyModeProvider>
+            </SelectedProductProvider>
+          </ModalOpenProvider>
+        </UserProvider >
+      </ProductsProvider>
     </GoogleOAuthProvider>
   </React.StrictMode>,
 )

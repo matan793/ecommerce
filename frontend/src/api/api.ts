@@ -105,5 +105,19 @@ export const api = {
         } catch (error) {
             throw error;
         }
+    },
+    deleteProduct: async (productId: number) => {
+        try {
+            const response = await apiClient.delete(`products/${productId}`)
+        } catch (error) {
+            throw error;
+        }
+    },
+    editProduct: async (productId: number, product: Partial<ProductType>) => {
+        try {
+            const response = await apiClient.patch(`products/${productId}`, {...product})
+        } catch (error) {
+            throw error;
+        }
     }
 };

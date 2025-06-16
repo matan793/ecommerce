@@ -172,3 +172,11 @@ INSERT INTO ecommerce.products (product_id, name, description, brand_id, price, 
 -- -- SELECT setval('ecommerce.users_user_id_seq', (SELECT MAX(user_id) FROM ecommerce.users));
 
 select * from ecommerce.users;
+
+
+ALTER TABLE ecommerce.order_items 
+DROP CONSTRAINT order_items_product_id_fkey,
+ADD CONSTRAINT order_items_product_id_fkey 
+FOREIGN KEY (product_id) 
+REFERENCES ecommerce.products(product_id)
+ON DELETE CASCADE;
