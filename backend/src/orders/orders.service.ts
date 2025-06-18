@@ -12,7 +12,7 @@ export class OrdersService {
 
     async findAll() {
 
-        const orders = await this.ordersRepository.find({ relations: ['user', 'address'] });
+        const orders = await this.ordersRepository.find({ relations: ['user', 'address', 'items', 'payments'] });
         return orders.map(order => {
             if (order.user) {
                 const { password, role, googleId, address, ...userWithoutPassword } = order.user;
@@ -65,13 +65,11 @@ export class OrdersService {
             .orderBy('month')
             .getRawMany();
 
-        // Step 2: Create array of all 12 months in the current year
         const allMonths = Array.from({ length: 12 }, (_, i) => {
-            const month = (i + 1).toString().padStart(2, '0'); // '01' to '12'
+            const month = (i + 1).toString().padStart(2, '0');
             return `${year}-${month}`;
         });
 
-        // Step 3: Fill missing months with 0 count
         const finalResults = allMonths.map((month) => {
             const found = rawResults.find((r) => r.month === month);
             return {
@@ -82,4 +80,5 @@ export class OrdersService {
 
         return finalResults;
     }
+
 } 

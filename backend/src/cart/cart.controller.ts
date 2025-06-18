@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, ValidationPipe, Request, Post, Body, UsePipes, Delete } from '@nestjs/common';
+import { Controller, Get, UseGuards, ValidationPipe, Request, Post, Body, UsePipes, Delete, ParseIntPipe, Param } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AddToCartDTO } from 'src/utils/DTO/addToCartDTO';
@@ -30,6 +30,11 @@ export class CartController {
     @Delete('all')
     async deleteAll(@Request() {user}: {user: User}) {
         return await this.cartService.deleteAllUserProducts(user.userId);
+    }
+
+    @Delete(':productId')
+    async deleteProductFromCart(@Request() {user}: {user: User}, @Param('productId', ParseIntPipe) productId: number){
+        return await this.cartService.deleteProductFromCart(user.userId, productId);
     }
 
 }

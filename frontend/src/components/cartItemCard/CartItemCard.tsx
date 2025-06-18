@@ -2,7 +2,7 @@ import { Card, CardMedia, CardContent, Typography, IconButton, Box } from '@mui/
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import React from 'react';
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 interface CartItemCardProps {
     name: string;
     brand: string;
@@ -11,6 +11,7 @@ interface CartItemCardProps {
     quantity: number;
     onIncrement: () => void;
     onDecrement: () => void;
+    onDelete: () => void;
 }
 
 const CartItemCard: React.FC<CartItemCardProps> = ({ 
@@ -20,7 +21,8 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
     imageUrl, 
     quantity,
     onIncrement,
-    onDecrement 
+    onDecrement ,
+    onDelete
 }) => {
     const styles = {
         card: { 
@@ -82,6 +84,14 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
                         onClick={onIncrement}
                     >
                         <AddIcon />
+                    </IconButton>
+                    <Box sx={{flexGrow: 1}}></Box>
+                    <IconButton 
+                        size="small" 
+                        onClick={onDelete}
+                 
+                    >
+                        <DeleteOutlineIcon />
                     </IconButton>
                 </Box>
             </CardContent>

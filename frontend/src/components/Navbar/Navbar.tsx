@@ -79,17 +79,6 @@ const Navbar: React.FC<NavbarProps> = ({ menuButtonCallback, menuItems }) => {
                 </Button>
             </Typography></>
     )
-
-    const handleLoad = () => {
-        if (loading)
-            return <Typography variant="body1" sx={{ flexGrow: 1, textAlign: 'right' }}>Loading...</Typography>;
-        else if (user) {
-            return profile();
-        }
-        else {
-            return notLoggedIn();
-        }
-    }
     return (
         <>
             <AppBar position="static" sx={{ backgroundColor: 'black' }}>
@@ -102,13 +91,13 @@ const Navbar: React.FC<NavbarProps> = ({ menuButtonCallback, menuItems }) => {
                         Brands
                     </Button>
                     {(user && user.role === UserRole.admin) &&
-                        (
+                        (   
                             <>
                                 <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/admin/products') }} >
                                     Menage Products
                                 </Button>
                                 <Button color='inherit' variant="text" component="div" onClick={() => { navigate('/admin/orders') }} >
-                                    Menage Orders
+                                    DashBoard
                                 </Button>
                             </>
                         )}

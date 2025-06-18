@@ -20,8 +20,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [loading, setLoading] = useState<boolean>(true);
     const logout = () => setUser(null);
     const fetchUser = async () => {
-   
-
         try {
             const res = await apiClient.get<UserType>('/auth/user')
 

@@ -92,3 +92,8 @@ export interface OrderType {
     payments: PaymentType[];
     createdAt: Date;
 }
+
+export interface MonthlyOrderStats {
+  month: number;
+  orderCount: number;
+}

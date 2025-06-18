@@ -18,9 +18,10 @@ interface CartProps {
     onUpdateQuantity: (id: number, newQuantity: number) => void;
     isLoading?: boolean; // Add this line
     onPurchaceNow: () => void;
+    onDeleteProductFromCart: (productId: number) => void;
 }
 
-const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity, onPurchaceNow }) => {
+const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity, onPurchaceNow, onDeleteProductFromCart }) => {
     const totalAmount = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
     return (
         <Drawer
@@ -45,7 +46,7 @@ const Cart: React.FC<CartProps> = ({ open, onClose, items, onUpdateQuantity, onP
                     {items.map((item) => (
                         <CartItemCard
                             name={item.product.name} brand={item.product.brand.name} price={item.product.price} imageUrl={item.product.imageUrl} key={item.productId}
-
+                            onDelete={() => onDeleteProductFromCart(item.productId)}
                             onIncrement={() => onUpdateQuantity(item.productId, item.quantity + 1)}
                             onDecrement={() => onUpdateQuantity(item.productId, item.quantity - 1)} quantity={item.quantity} />
                     ))}

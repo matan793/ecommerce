@@ -3,22 +3,8 @@ import { Box, TextField, Button, Typography, Paper, Container } from '@mui/mater
 import { api, apiClient } from '../../api/api';
 import { useUser } from '../../contexts/userContext';
 import { Link, useNavigate } from 'react-router';
-import Navbar from '../Navbar/Navbar';
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
-
-const bannerStyle: React.CSSProperties = {
-    width: '100%',
-    height: '180px',
-    background: 'linear-gradient(90deg, #fddfa1 0%, #FFF8DC 100%)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '32px',
-    borderRadius: '16px',
-    boxShadow: '0 4px 24px rgba(255, 215, 0, 0.2)',
-    overflow: 'hidden'
-};
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -80,118 +66,137 @@ const LoginPage: React.FC = () => {
             setUser(data);
             navigate('/');
             fetchUser();
-            console.log(data);
-
         } catch (error) {
-            toast.error('error with google login');
+            toast.error('Error with Google login');
             console.log(error);
         }
-    }
+    };
 
     return (
-        <>
-            {/* <Navbar /> */}
-            <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
-                height="100vh"
-                bgcolor="#f5f5f5"
-                sx={{
-                    background: 'linear-gradient(120deg, #fffbe6 0%, #f5e6ca 100%)',
-                    overflow: 'hidden',
-                }}
-            >
-                <Container maxWidth="xs" sx={{ mt: 0 }}>
-                    <Paper
-                        elevation={6}
-                        sx={{
-                            padding: 4,
-                            minWidth: 340,
-                            borderRadius: 4,
-                            background: 'rgba(255,255,255,0.95)',
-                            boxShadow: '0 8px 32px rgba(218,165,32,0.10)',
-                        }}
-                    >
-                        <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
-                            <TextField
-                                label="Email"
-                                type="email"
-                                fullWidth
-                                margin="normal"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                autoFocus
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            <TextField
-                                label="Password"
-                                type="password"
-                                fullWidth
-                                margin="normal"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                sx={{
-                                    background: '#fffbe6',
-                                    borderRadius: 2,
-                                }}
-                            />
-                            {error && (
-                                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                                    {error}
-                                </Typography>
-                            )}
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                sx={{
-                                    mt: 3,
-                                    fontWeight: 'bold',
-                                    fontSize: '1rem',
-                                    py: 1.2,
-                                    borderRadius: 2,
-                                    background: 'linear-gradient(90deg, #fddfa1 0%, #ffe082 100%)',
-                                    color: '#6d4c00',
-                                    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.15)',
-                                    '&:hover': {
-                                        background: 'linear-gradient(90deg, #ffe082 0%, #fddfa1 100%)',
+        <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            sx={{
+                background: 'linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%)',
+                overflow: 'hidden',
+            }}
+        >
+            <Container maxWidth="xs">
+                <Paper
+                    elevation={6}
+                    sx={{
+                        padding: 4,
+                        minWidth: 340,
+                        borderRadius: 4,
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+                        border: '1px solid #e0e0e0',
+                    }}
+                >
+                    <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
+                        <TextField
+                            label="Email"
+                            type="email"
+                            fullWidth
+                            margin="normal"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            autoFocus
+                            sx={{
+                                background: '#ffffff',
+                                borderRadius: 2,
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#ccc',
                                     },
-                                }}
-                                disabled={loading}
-                            >
-                                {loading ? 'Logging in...' : 'Login'}
-                            </Button>
-                        </form>
-                        <GoogleLogin
-                            onSuccess={handleGoogleLogin}
-                            onError={() => {
-                                console.log('Login Failed');
+                                    '&:hover fieldset': {
+                                        borderColor: '#999',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#1976d2',
+                                    },
+                                },
                             }}
                         />
-                        <Typography
-                            variant="body2"
-                            align="center"
-                            sx={{ mt: 2 }}
+                        <TextField
+                            label="Password"
+                            type="password"
+                            fullWidth
+                            margin="normal"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            sx={{
+                                background: '#ffffff',
+                                borderRadius: 2,
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#ccc',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#999',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#1976d2',
+                                    },
+                                },
+                            }}
+                        />
+                        {error && (
+                            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                                {error}
+                            </Typography>
+                        )}
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                                mt: 3,
+                                fontWeight: 'bold',
+                                fontSize: '1rem',
+                                py: 1.2,
+                                borderRadius: 2,
+                                background: 'linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)',
+                                color: '#fff',
+                                boxShadow: '0 4px 12px rgba(25, 118, 210, 0.2)',
+                                '&:hover': {
+                                    background: 'linear-gradient(90deg, #42a5f5 0%, #1976d2 100%)',
+                                },
+                            }}
+                            disabled={loading}
                         >
-                            Not registered yet?{' '}
-                            <Link to="/register" style={{ color: '#6d4c00', fontWeight: 'bold', textDecoration: 'underline' }}>
-                                Register here
-                            </Link>
-                        </Typography>
-                    </Paper>
-                </Container>
+                            {loading ? 'Logging in...' : 'Login'}
+                        </Button>
+                    </form>
 
-            </Box>
-        </>
+                    <GoogleLogin
+                        onSuccess={handleGoogleLogin}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                    />
+
+                    <Typography variant="body2" align="center" sx={{ mt: 2, color: '#555' }}>
+                        Not registered yet?{' '}
+                        <Link
+                            to="/register"
+                            style={{
+                                color: '#1976d2',
+                                fontWeight: 'bold',
+                                textDecoration: 'underline',
+                            }}
+                        >
+                            Register here
+                        </Link>
+                    </Typography>
+                </Paper>
+            </Container>
+        </Box>
     );
 };
 

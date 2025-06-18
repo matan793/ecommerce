@@ -17,7 +17,7 @@ import { useModalOpen } from './contexts/modalOpenContext'
 
 function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { user, setUser } = useUser();
+  const { user, setUser, fetchUser } = useUser();
   const navigate = useNavigate();
   const { selectedProduct, setSelectedProduct } = useSelectedProduct();
   const { mode, setMode } = useBuyMode()
@@ -83,7 +83,15 @@ function App() {
       toast.error('Failed to place order');
     }
   };
-console.log(user);
+
+  const handleDeleteProductFromCart = async (productId: number) => {
+    try {
+      await api.deleteProductFromCart(productId);
+      await fetchUser();
+    } catch (error) {
+      toast.error('error in deleting product')
+    }
+  }
 
   return (
     <>
@@ -93,6 +101,7 @@ console.log(user);
         onClose={() => setIsCartOpen(false)}
         items={user?.cart || []}
         onUpdateQuantity={handleUpdateQuantity}
+        onDeleteProductFromCart={handleDeleteProductFromCart}
         onPurchaceNow={() => {
           setMode('cart');
           setOpen(true);

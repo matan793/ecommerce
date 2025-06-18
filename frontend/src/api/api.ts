@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BrandType, OrderType, ProductType, UserType } from "../utils/types/types";
+import { BrandType, MonthlyOrderStats, OrderType, ProductType, UserType } from "../utils/types/types";
 import { toast } from "react-toastify";
 
 export const apiClient = axios.create({
@@ -144,7 +144,7 @@ export const api = {
             throw error;
         }
     },
-        getMonthlyOrderStats: async (year: number): Promise<{ month: string; orderCount: number }[]> => {
+    getMonthlyOrderStats: async (year: number): Promise<MonthlyOrderStats[]> => {
         try {
             const response = await apiClient.get(`/orders/stats/monthly`, {
                 params: { year },
@@ -155,5 +155,13 @@ export const api = {
             throw error;
         }
     },
+    deleteProductFromCart: async (productId: number) => {
+        try {
+            const response = await apiClient.delete(`cart/${productId}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 };

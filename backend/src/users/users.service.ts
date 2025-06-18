@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { DeepPartial, Not, Repository } from 'typeorm';
@@ -45,6 +45,10 @@ export class UsersService {
     }
 
     async create(user: DeepPartial<User>): Promise<User> {
+        const u = await this.userRepository.find({ where: { email: user.email } })
+        if(u){
+            throw new BadRequestException('user already exists');
+        }
         const newUser = this.userRepository.create(user);
         if (newUser.password) {
             newUser.password = await bcrypt.hash(newUser.password, 10);

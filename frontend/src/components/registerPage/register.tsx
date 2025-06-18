@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper, Container, Stepper, Step, StepLabel } from '@mui/material';
-import { Grid } from '@mui/material';
+import {
+    Box, TextField, Button, Typography, Paper, Container,
+    Stepper, Step, StepLabel, Grid
+} from '@mui/material';
 import { apiClient } from '../../api/api';
 import { Link, useNavigate } from 'react-router';
 
 const RegisterPage: React.FC = () => {
     const [step, setStep] = useState(0);
-
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -80,11 +81,13 @@ const RegisterPage: React.FC = () => {
                     country: form.country,
                     postalCode: form.postalCode,
                 },
-                
             });
             if (response.status === 201) {
                 navigate('/login');
-            } else {
+            } else if(response.status === 400){
+                setError('Registration failed. email allready exists.');
+            } 
+            else {
                 setError('Registration failed. Please check your details.');
             }
         } catch (err: any) {
@@ -118,13 +121,12 @@ const RegisterPage: React.FC = () => {
             justifyContent="center"
             alignItems="center"
             minHeight="100vh"
-            bgcolor="#f5f5f5"
             sx={{
-                background: 'linear-gradient(120deg, #fffbe6 0%, #f5e6ca 100%)',
+                background: 'linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%)',
                 overflow: 'hidden',
             }}
         >
-            <Container maxWidth="sm" sx={{ mt: 0 }}>
+            <Container maxWidth="sm">
                 <Paper
                     elevation={6}
                     sx={{
@@ -132,7 +134,8 @@ const RegisterPage: React.FC = () => {
                         minWidth: { xs: 0, sm: 420 },
                         borderRadius: 4,
                         background: 'rgba(255,255,255,0.95)',
-                        boxShadow: '0 8px 32px rgba(218,165,32,0.10)',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                        border: '1px solid #e0e0e0',
                     }}
                 >
                     <Stepper activeStep={step} alternativeLabel sx={{ mb: 3 }}>
@@ -144,129 +147,68 @@ const RegisterPage: React.FC = () => {
                         </Step>
                     </Stepper>
                     <form onSubmit={handleNext}>
-                        {step === 0 && (
-                            <Grid container spacing={2}>
-                                <Grid>
-                                    <TextField
-                                        label="First Name"
-                                        name="firstName"
-                                        fullWidth
-                                        value={form.firstName}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid>
-                                    <TextField
-                                        label="Last Name"
-                                        name="lastName"
-                                        fullWidth
-                                        value={form.lastName}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid>
-                                    <TextField
-                                        label="Email"
-                                        name="email"
-                                        type="email"
-                                        fullWidth
-                                        value={form.email}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        label="Phone Number"
-                                        name="phone"
-                                        type="tel"
-                                        fullWidth
-                                        value={form.phone}
-                                        onChange={handleChange}
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                        placeholder="+123456789"
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        label="Birthdate"
-                                        name="birthdate"
-                                        type="date"
-                                        fullWidth
-                                        value={form.birthdate}
-                                        onChange={handleChange}
-                                        required
-                                        InputLabelProps={{ shrink: true }}
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        label="Password"
-                                        name="password"
-                                        type="password"
-                                        fullWidth
-                                        value={form.password}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        )}
-                        {step === 1 && (
-                            <Grid container spacing={2}>
-                                <Grid >
-                                    <TextField
-                                        label="Street"
-                                        name="street"
-                                        fullWidth
-                                        value={form.street}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        label="City"
-                                        name="city"
-                                        fullWidth
-                                        value={form.city}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        label="Country"
-                                        name="country"
-                                        fullWidth
-                                        value={form.country}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        label="Postal Code"
-                                        name="postalCode"
-                                        fullWidth
-                                        value={form.postalCode}
-                                        onChange={handleChange}
-                                        required
-                                        sx={{ background: '#fffbe6', borderRadius: 2 }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        )}
+                        <Grid container spacing={2}>
+                            {step === 0 && (
+                                <>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField label="First Name" name="firstName" fullWidth required
+                                            value={form.firstName} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField label="Last Name" name="lastName" fullWidth required
+                                            value={form.lastName} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Email" name="email" type="email" fullWidth required
+                                            value={form.email} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Phone Number" name="phone" type="tel" fullWidth
+                                            value={form.phone} onChange={handleChange}
+                                            placeholder="+123456789"
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Birthdate" name="birthdate" type="date" fullWidth required
+                                            value={form.birthdate} onChange={handleChange}
+                                            InputLabelProps={{ shrink: true }}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Password" name="password" type="password" fullWidth required
+                                            value={form.password} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                </>
+                            )}
+                            {step === 1 && (
+                                <>
+                                    <Grid item xs={12}>
+                                        <TextField label="Street" name="street" fullWidth required
+                                            value={form.street} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField label="City" name="city" fullWidth required
+                                            value={form.city} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField label="Country" name="country" fullWidth required
+                                            value={form.country} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Postal Code" name="postalCode" fullWidth required
+                                            value={form.postalCode} onChange={handleChange}
+                                            sx={{ background: '#fff', borderRadius: 2 }} />
+                                    </Grid>
+                                </>
+                            )}
+                        </Grid>
                         {error && (
                             <Typography color="error" variant="body2" sx={{ mt: 2 }}>
                                 {error}
@@ -288,37 +230,28 @@ const RegisterPage: React.FC = () => {
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="primary"
                                 sx={{
                                     fontWeight: 'bold',
                                     fontSize: '1rem',
                                     py: 1.2,
                                     px: 4,
                                     borderRadius: 2,
-                                    background: 'linear-gradient(90deg, #fddfa1 0%, #ffe082 100%)',
-                                    color: '#6d4c00',
-                                    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.15)',
+                                    background: 'linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)',
+                                    color: '#fff',
+                                    boxShadow: '0 4px 14px rgba(25, 118, 210, 0.2)',
                                     '&:hover': {
-                                        background: 'linear-gradient(90deg, #ffe082 0%, #fddfa1 100%)',
+                                        background: 'linear-gradient(90deg, #42a5f5 0%, #1976d2 100%)',
                                     },
                                 }}
                                 disabled={loading}
                             >
-                                {loading
-                                    ? 'Registering...'
-                                    : step === 0
-                                    ? 'Next'
-                                    : 'Register'}
+                                {loading ? 'Registering...' : step === 0 ? 'Next' : 'Register'}
                             </Button>
                         </Box>
                     </form>
-                    <Typography
-                        variant="body2"
-                        align="center"
-                        sx={{ mt: 2 }}
-                    >
-                        have a user?{' '}
-                        <Link to="/login" style={{ color: '#6d4c00', fontWeight: 'bold', textDecoration: 'underline' }}>
+                    <Typography variant="body2" align="center" sx={{ mt: 2, color: '#555' }}>
+                        Already have an account?{' '}
+                        <Link to="/login" style={{ color: '#1976d2', fontWeight: 'bold', textDecoration: 'underline' }}>
                             Login here
                         </Link>
                     </Typography>

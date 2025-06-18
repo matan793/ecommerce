@@ -90,7 +90,7 @@ const ProfilePage: React.FC = () => {
         <Box
             sx={{
                 minHeight: '100vh',
-                background: 'linear-gradient(120deg, #f9f6ef 0%, #f5e6ca 100%)',
+                background: 'linear-gradient(120deg, #f1f4f8 0%, white 100%)',
                 py: 6,
                 display: 'flex',
                 alignItems: 'center',
@@ -114,7 +114,7 @@ const ProfilePage: React.FC = () => {
                         textAlign="center"
                         sx={{
                             fontWeight: 700,
-                            color: '#bfa14a',
+                            color: '#2867ec',
                             letterSpacing: 1,
                         }}
                     >
@@ -122,7 +122,7 @@ const ProfilePage: React.FC = () => {
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
                     <form onSubmit={handleSave}>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} sx={{ml: 2}}>
                             {/* Personal Info */}
                             <Grid>
                                 <TextField
@@ -132,7 +132,7 @@ const ProfilePage: React.FC = () => {
                                     onChange={handleChange}
                                     fullWidth
                                     required
-                                    sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    sx={{  borderRadius: 2 }}
                                 />
                             </Grid>
                             <Grid>
@@ -143,7 +143,7 @@ const ProfilePage: React.FC = () => {
                                     onChange={handleChange}
                                     fullWidth
                                     required
-                                    sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    sx={{  borderRadius: 2 }}
                                 />
                             </Grid>
                             <Grid>
@@ -155,7 +155,7 @@ const ProfilePage: React.FC = () => {
                                     fullWidth
                                     required
                                     type="email"
-                                    sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    sx={{  borderRadius: 2 }}
                                 />
                             </Grid>
                             <Grid>
@@ -168,7 +168,7 @@ const ProfilePage: React.FC = () => {
                                     required
                                     type="date"
                                     InputLabelProps={{ shrink: true }}
-                                    sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    sx={{  borderRadius: 2 }}
                                 />
                             </Grid>
                             <Grid>
@@ -178,7 +178,7 @@ const ProfilePage: React.FC = () => {
                                     value={form.phoneNumber}
                                     onChange={handleChange}
                                     fullWidth
-                                    sx={{ background: '#fffbe6', borderRadius: 2 }}
+                                    sx={{  borderRadius: 2 }}
                                 />
                             </Grid>
                         </Grid>
@@ -186,11 +186,11 @@ const ProfilePage: React.FC = () => {
                         {/* Address Section */}
                         <Box
                             sx={{
-                                mt: 5,
+                                mt: 0,
                                 mb: 2,
                                 px: 2,
                                 py: 3,
-                                background: 'linear-gradient(90deg, #fffbe6 0%, #f5e6ca 100%)',
+                                // background: 'linear-gradient(90deg, #5fa4fa 0%, #2867ec 100%)',
                                 borderRadius: 3,
                                 boxShadow: '0 2px 8px rgba(218,165,32,0.07)',
                             }}
@@ -198,10 +198,11 @@ const ProfilePage: React.FC = () => {
                             <Typography
                                 variant="h6"
                                 sx={{
-                                    color: '#bfa14a',
+                                    color: 'black',
                                     fontWeight: 600,
                                     mb: 2,
                                     letterSpacing: 1,
+                                    
                                 }}
                             >
                                 Address
@@ -209,6 +210,7 @@ const ProfilePage: React.FC = () => {
                             <Grid container spacing={2}>
                                 <Grid  >
                                     <TextField
+                                    variant='outlined'
                                         label="Street"
                                         name="street"
                                         value={form.address.street}
@@ -265,11 +267,11 @@ const ProfilePage: React.FC = () => {
                                 fontSize: '1rem',
                                 py: 1.2,
                                 borderRadius: 2,
-                                background: 'linear-gradient(90deg, #fddfa1 0%, #ffe082 100%)',
-                                color: '#6d4c00',
+                                background: 'linear-gradient(90deg, #5fa4fa 0%, #2867ec 100%)',
+                                color: 'white',
                                 boxShadow: '0 2px 8px rgba(255, 215, 0, 0.15)',
                                 '&:hover': {
-                                    background: 'linear-gradient(90deg, #ffe082 0%, #fddfa1 100%)',
+                                    background: 'linear-gradient(90deg, #5fa4fa 0%, #2867ec 100%)',
                                 },
                             }}
                         >
