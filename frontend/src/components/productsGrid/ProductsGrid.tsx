@@ -8,15 +8,16 @@ import ParfumAdminButtons from '../parfumeCard/ParfumeAdminButtons';
 interface ProductsGridProps {
   products: ProductType[];
   admin?: boolean;
+  onEdit?: (product: ProductType) => void;
 }
 
-const ProductsGrid: React.FC<ProductsGridProps> = ({ products, admin }) => {
+const ProductsGrid: React.FC<ProductsGridProps> = ({ products, admin, onEdit }) => {
   return (
     <Grid container spacing={3}>
       {products.map((parfume: ProductType) => (
-        <Grid item xs={12} sm={6} md={4} key={parfume.productId}>
+        <Grid key={parfume.productId}>
           <ParfumeCard product={parfume}>
-            {admin ? <ParfumAdminButtons product={parfume} /> : <ParfumUserButtons product={parfume} />}
+            {admin ? <ParfumAdminButtons onEdit={onEdit} product={parfume} /> : <ParfumUserButtons product={parfume} />}
           </ParfumeCard>
         </Grid>
       ))}

@@ -4,6 +4,7 @@ import { BrandType, CategoryType } from '../../../utils/types/types';
 import { toast } from 'react-toastify';
 import { apiClient } from '../../../api/api';
 import { useProducts } from '../../../hooks/useProducts';
+import FilterBar from '../../filterBar/FilterBar';
 
 interface ProductCreateFormProps {
     brands: BrandType[];
@@ -67,22 +68,22 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
     };
 
     return (
-        <Paper sx={{ p: 4, borderRadius: 4, background: 'rgba(255,255,255,0.97)' }}>
-            <Typography variant="h5" fontWeight={700} mb={3}>
+       <Paper sx={{ p: 4, borderRadius: 4, background: '#fff', boxShadow: '0 2px 16px rgba(30, 60, 90, 0.07)', border: '1px solid #e3e8ee' }}>
+            <Typography variant="h5" fontWeight={700} mb={3} color="#2563eb">
                 Create New Product
             </Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                    <Grid >
+                    <Grid>
                         <TextField label="Name" name="name" value={form.name} onChange={handleChange} fullWidth required />
                     </Grid>
-                    <Grid >
+                    <Grid>
                         <TextField label="Price" name="price" type="number" value={form.price} onChange={handleChange} fullWidth required />
                     </Grid>
                     <Grid>
                         <TextField label="Description" name="description" value={form.description} onChange={handleChange} fullWidth multiline minRows={2} />
                     </Grid>
-                    <Grid >
+                    <Grid sx={{ width: 220 }}>
                         <TextField
                             select
                             label="Brand"
@@ -99,7 +100,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid >
+                    <Grid sx={{ width: 220 }}>
                         <TextField
                             select
                             label="Category"
@@ -116,7 +117,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid >
+                    <Grid>
                         <TextField
                             label="Stock Quantity"
                             name="stockQuantity"
@@ -127,7 +128,7 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             required
                         />
                     </Grid>
-                    <Grid >
+                    <Grid>
                         <Button
                             variant="contained"
                             component="label"
@@ -136,12 +137,12 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                                 fontWeight: 'bold',
                                 fontSize: '1rem',
                                 py: 1.2,
-                                borderRadius: 2,
-                                background: 'linear-gradient(90deg, #fddfa1 0%, #ffe082 100%)',
-                                color: '#6d4c00',
-                                boxShadow: '0 2px 8px rgba(255, 215, 0, 0.15)',
+                                borderRadius: 2.5,
+                                background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
+                                color: '#fff',
+                                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.10)',
                                 '&:hover': {
-                                    background: 'linear-gradient(90deg, #ffe082 0%, #fddfa1 100%)',
+                                    background: 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)',
                                 },
                             }}
                             fullWidth
@@ -160,16 +161,16 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = ({ brands, categorie
                             type="submit"
                             variant="contained"
                             sx={{
-                                mt: 2,
+                                mt: 1,
                                 fontWeight: 'bold',
                                 fontSize: '1rem',
                                 py: 1.2,
-                                borderRadius: 2,
-                                background: 'linear-gradient(90deg, #fddfa1 0%, #ffe082 100%)',
-                                color: '#6d4c00',
-                                boxShadow: '0 2px 8px rgba(255, 215, 0, 0.15)',
+                                borderRadius: 2.5,
+                                background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
+                                color: '#fff',
+                                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.10)',
                                 '&:hover': {
-                                    background: 'linear-gradient(90deg, #ffe082 0%, #fddfa1 100%)',
+                                    background: 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)',
                                 },
                             }}
                             fullWidth

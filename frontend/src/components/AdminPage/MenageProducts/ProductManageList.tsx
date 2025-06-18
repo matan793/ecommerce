@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Typography, Grid, Button, Box } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { ProductType } from '../../../utils/types/types';
 import ProductsGrid from '../../productsGrid/ProductsGrid';
 
@@ -10,11 +10,11 @@ interface ProductManageListProps {
 }
 
 const ProductManageList: React.FC<ProductManageListProps> = ({ products, onEdit, onDelete }) => (
-  <Paper sx={{ p: 4, borderRadius: 4, background: 'rgba(255,255,255,0.97)' }}>
-    <Typography variant="h5" fontWeight={700} mb={3}>
+  <Paper sx={{ p: 4, borderRadius: 4, background: '#fff', boxShadow: '0 2px 16px rgba(30, 60, 90, 0.07)', border: '1px solid #e3e8ee' }}>
+    <Typography variant="h5" fontWeight={700} mb={3} color="#2563eb">
       Manage Products
     </Typography>
-   <ProductsGrid products={products} admin />
+    <ProductsGrid products={products} admin onEdit={onEdit} />
   </Paper>
 );
 

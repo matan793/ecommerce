@@ -113,11 +113,47 @@ export const api = {
             throw error;
         }
     },
-    editProduct: async (productId: number, product: Partial<ProductType>) => {
+    editProduct: async (productId: number, product: any) => {
         try {
-            const response = await apiClient.patch(`products/${productId}`, {...product})
+            const response = await apiClient.patch(`products/${productId}`, { ...product })
         } catch (error) {
             throw error;
         }
-    }
+    },
+    getRevenue: async (): Promise<number> => {
+        try {
+            const response = (await apiClient.get('/orders/revenue')).data;
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    },
+    countOrdersInMonth: async (year: number, month: number): Promise<number> => {
+        try {
+            const response = (await apiClient.get(`/orders/${year}/${month}/count`)).data;
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    },
+    revenueInMonth: async (year: number, month: number): Promise<number> => {
+        try {
+            const response = (await apiClient.get(`/orders/${year}/${month}/sales`)).data;
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    },
+        getMonthlyOrderStats: async (year: number): Promise<{ month: string; orderCount: number }[]> => {
+        try {
+            const response = await apiClient.get(`/orders/stats/monthly`, {
+                params: { year },
+            });
+            return response.data;
+        } catch (error) {
+            toast.error('Failed to fetch monthly order stats');
+            throw error;
+        }
+    },
+
 };

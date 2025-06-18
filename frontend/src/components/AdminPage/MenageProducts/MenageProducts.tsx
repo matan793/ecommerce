@@ -1,44 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import ProductSidebar from './ProductSidebar';
 import ProductCreateForm from './ProductCreateForm';
 import ProductManageList from './ProductManageList';
-import { api } from '../../../api/api';
-import { ProductType, BrandType, CategoryType } from '../../../utils/types/types';
+import { ProductType } from '../../../utils/types/types';
 import { useProducts } from '../../../hooks/useProducts';
 import { useBrands } from '../../../hooks/useBrands';
 import { useCategories } from '../../../hooks/useCategories';
+import EditProduct from '../../EditProduct/EditProduct'; // Import the modal
 
 const MenageProducts: React.FC = () => {
     const [selectedSection, setSelectedSection] = useState(0);
-    const {products} = useProducts()
-    const {brands} = useBrands();
-    const {categories} = useCategories();
+    const { products, fetchProducts } = useProducts();
+    const { brands } = useBrands();
+    const { categories } = useCategories();
 
+    // Modal state
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [productToEdit, setProductToEdit] = useState<ProductType | null>(null);
 
-    // Dummy handlers for now
-    const handleEdit = (product: ProductType) => { };
-    const handleDelete = (product: ProductType) => { };
+    // Open modal with selected product
+    const handleEdit = (product: ProductType) => {
+        setProductToEdit(product);
+        setEditModalOpen(true);
+    };
+
+    // Close modal
+    const handleCloseEdit = () => {
+        setEditModalOpen(false);
+        setProductToEdit(null);
+    };
+
+    // Optionally refresh products after edit
+    const handleEditSuccess = () => {
+        fetchProducts();
+    };
+
+    const handleDelete = (product: ProductType) => { /* ... */ };
 
     return (
         <Box
             sx={{
                 minHeight: '100vh',
                 width: "100%",
-                background: 'linear-gradient(120deg, #fffbe6 0%, #f5e6ca 100%)',
+                background: 'linear-gradient(120deg, #f7fafd 0%, #e3e8ee 100%)',
                 py: 6,
                 px: 15,
                 gap: 10,
                 display: 'flex',
-                // alignItems: 'flex-start',
                 justifyContent: 'space-between',
             }}
         >
-
-
             <ProductSidebar selected={selectedSection} onSelect={setSelectedSection} />
 
-            <Grid sx={{maxWidth:1200}} >
+            <Grid sx={{ maxWidth: 1200 }} >
                 {selectedSection === 0 && (
                     <ProductCreateForm brands={brands} categories={categories} />
                 )}
@@ -51,6 +66,17 @@ const MenageProducts: React.FC = () => {
                 )}
             </Grid>
 
+            {/* EditProduct Modal */}
+            {productToEdit && (
+                <EditProduct
+                    open={editModalOpen}
+                    onClose={handleCloseEdit}
+                    product={productToEdit}
+                    brands={brands}
+                    categories={categories}
+                    onEditSuccess={handleEditSuccess}
+                />
+            )}
         </Box>
     );
 };

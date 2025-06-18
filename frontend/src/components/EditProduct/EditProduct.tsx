@@ -35,6 +35,7 @@ const EditProduct: React.FC<EditProductModalProps> = ({
         brandId: product.brand.brandId,
         categoryId: product.category.categoryId,
         imageUrl: product.imageUrl,
+        stockQuantity: product.stockQuantity, // <-- Add this line
     });
     const [saving, setSaving] = React.useState(false);
 
@@ -47,6 +48,7 @@ const EditProduct: React.FC<EditProductModalProps> = ({
                 brandId: product.brand.brandId,
                 categoryId: product.category.categoryId,
                 imageUrl: product.imageUrl,
+                stockQuantity: product.stockQuantity, // <-- Add this line
             });
         }
     }, [product]);
@@ -68,14 +70,15 @@ const EditProduct: React.FC<EditProductModalProps> = ({
                 name: form.name,
                 description: form.description,
                 price: Number(form.price),
-                brand: { brandId: Number(form.brandId) } as BrandType,
-                category: { categoryId: form.categoryId } as CategoryType,
+                brandId: Number(form.brandId),
+                categoryId: Number(form.categoryId),
                 imageUrl: form.imageUrl,
+                stockQuantity: Number(form.stockQuantity), // <-- Add this line
             });
             if (onEditSuccess) onEditSuccess();
             onClose();
         } catch (error) {
-            // Optionally show error
+
         } finally {
             setSaving(false);
         }
@@ -113,6 +116,16 @@ const EditProduct: React.FC<EditProductModalProps> = ({
                                 name="price"
                                 type="number"
                                 value={form.price}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Stock Quantity</FormLabel>
+                            <Input
+                                name="stockQuantity"
+                                type="number"
+                                value={form.stockQuantity}
                                 onChange={handleChange}
                                 required
                             />

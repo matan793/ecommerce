@@ -17,6 +17,7 @@ import AdminRoute from './routes/Admin/AdminRoute.tsx'
 import ProfilePage from './components/ProfilePage/ProfilePage.tsx'
 import MenageProducts from './components/AdminPage/MenageProducts/MenageProducts.tsx'
 import { ProductsProvider } from './hooks/useProducts.tsx'
+import MenageOrders from './components/AdminPage/MenageOrders/MenageOrders.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/" replace /> },
       { path: 'products', element: <MenageProducts /> },
-      { path: 'orders', element: <div>Users Management</div> },
+      { path: 'orders', element: <MenageOrders /> },
     ],
   },
 ])

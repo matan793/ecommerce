@@ -8,7 +8,17 @@ interface ProductSidebarProps {
 const options = ['Create Product', 'Manage Products'];
 
 const ProductSidebar: React.FC<ProductSidebarProps> = ({ selected, onSelect }) => (
-  <Box sx={{ width: 220, bgcolor: '#f5e6ca', height: '100%', borderRadius: 3, p: 2 }}>
+  <Box
+    sx={{
+      width: 240,
+      bgcolor: '#f7fafd',
+      height: '100%',
+      borderRadius: 4,
+      p: 2.5,
+      boxShadow: '0 2px 16px rgba(30, 60, 90, 0.07)',
+      border: '1px solid #e3e8ee',
+    }}
+  >
     <List>
       {options.map((text, idx) => (
         <ListItemButton
@@ -16,11 +26,16 @@ const ProductSidebar: React.FC<ProductSidebarProps> = ({ selected, onSelect }) =
           selected={selected === idx}
           onClick={() => onSelect(idx)}
           sx={{
-            borderRadius: 2,
+            borderRadius: 2.5,
             mb: 1,
             fontWeight: 600,
-            bgcolor: selected === idx ? '#ffe082' : undefined,
-            color: selected === idx ? '#6d4c00' : undefined,
+            bgcolor: selected === idx ? '#2563eb22' : 'transparent',
+            color: selected === idx ? '#2563eb' : '#222',
+            transition: 'background 0.2s, color 0.2s',
+            '&:hover': {
+              bgcolor: '#2563eb11',
+              color: '#2563eb',
+            },
           }}
         >
           <ListItemText primary={text} />

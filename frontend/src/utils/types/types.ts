@@ -12,9 +12,9 @@ export interface UserType {
     createdAt: Date;
 }
 
-export enum UserRole{
-    admin='admin',
-    user='user'
+export enum UserRole {
+    admin = 'admin',
+    user = 'user'
 }
 export interface BrandType {
     brandId: number;
@@ -25,9 +25,9 @@ export interface BrandType {
 }
 
 export enum ParfumeGenderType {
-    male="male",
-    female="female",
-    unisex="unisex"
+    male = "male",
+    female = "female",
+    unisex = "unisex"
 }
 export interface CategoryType {
     categoryId: string;
@@ -47,15 +47,16 @@ export interface ProductType {
     price: number;
     imageUrl: string;
     description?: string;
+    stockQuantity: number;
     category: CategoryType;
 }
-export enum OrderStatus{
-    pending='pending',
-    processing='processing',
-    cancelled='cancelled',
-    delivered='delivered'
+export enum OrderStatus {
+    pending = 'pending',
+    processing = 'processing',
+    cancelled = 'cancelled',
+    delivered = 'delivered'
 }
-export interface AddressType{
+export interface AddressType {
     addressId: number;
     city: string;
     street: string;
@@ -67,25 +68,27 @@ export interface OrderItemType {
     quantity: number;
     unitPrice: number;
 }
-export enum PaymentMethod{
-    creditCard='credit_card',
-    paypal='paypal'
+export enum PaymentMethod {
+    creditCard = 'credit_card',
+    paypal = 'paypal'
 }
-export enum PaymentStatus{
-    pending='pending',
-    cancelled='cancelled',
-    approved='approved'
+export enum PaymentStatus {
+    pending = 'pending',
+    cancelled = 'cancelled',
+    approved = 'approved'
 }
-export interface PaymentType{
+export interface PaymentType {
     paymentMethod: PaymentMethod;
     paymentStatus: PaymentStatus;
     amount: number;
 }
-export interface OrderType{
+export interface OrderType {
+    orderId: number;
     status: OrderStatus;
     totalAmount: number;
     user: UserType;
     address: AddressType;
     items: OrderItemType[];
     payments: PaymentType[];
+    createdAt: Date;
 }

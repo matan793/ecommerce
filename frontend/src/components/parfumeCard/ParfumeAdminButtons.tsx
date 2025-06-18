@@ -14,8 +14,9 @@ const styles = {
 };
 interface ParfumAdminButtonsProps {
     product: ProductType;
+    onEdit?: (product: ProductType) => void;
 }
-const ParfumAdminButtons: React.FC<ParfumAdminButtonsProps> = ({ product }: ParfumAdminButtonsProps) => {
+const ParfumAdminButtons: React.FC<ParfumAdminButtonsProps> = ({ product, onEdit }: ParfumAdminButtonsProps) => {
 
     const { fetchUser } = useUser();
     const {fetchProducts} = useProducts();
@@ -39,7 +40,7 @@ const ParfumAdminButtons: React.FC<ParfumAdminButtonsProps> = ({ product }: Parf
                 variant="contained"
                 color="primary"
                 size="medium"
-                onClick={handleEdit}
+                onClick={() => onEdit && onEdit(product)}
                 sx={{
                     ...styles.button,
                     background: 'linear-gradient(90deg, #57B9FF 0%, #3A8DFF 100%)',

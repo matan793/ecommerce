@@ -23,7 +23,7 @@ export class ProductsController {
     }
 
     @Post()
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @UseGuards(AuthGuard('jwt'), RolesGuard) 
     @Roles(UserRoles.admin)
     @UseInterceptors(
         FileInterceptor('file', {
@@ -34,14 +34,12 @@ export class ProductsController {
         @UploadedFile() file: Express.Multer.File,
         @Body('product') productString: string
     ) {
-        // Parse the product string to object
         const productData: ProductDTO = JSON.parse(productString);
 
         if (!file) {
             throw new BadRequestException('request must contain image');
         }
 
-        // Upload image if exists
         const url = await this.cloudinaryService.uploadImageFromBuffer(file);
         productData.imageUrl = url;
 
