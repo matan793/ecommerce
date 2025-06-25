@@ -1,0 +1,80 @@
+import React, { useMemo, useState } from 'react';
+import { Typography, Grid, Container } from '@mui/material';
+import { useProducts } from '../hooks/useProducts';
+import ProductsGrid from './productsGrid/ProductsGrid';
+import { useBrands } from '../hooks/useBrands';
+import { BrandType, CategoryType, ProductType } from '../utils/types/types';
+import { useCategories } from '../hooks/useCategories';
+import FilterBar from './filterBar/FilterBar';
+import SearchBar from './SearchBar/SearchBar';
+import { Banner } from './Banner/Banner';
+
+interface filterOptions {
+  brand: string;
+  category: string;
+  search: string;
+}
+
+
+const styles = {
+  filterContainer: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginBottom: '16px',
+  }
+};
+
+const HomePage: React.FC = () => {
+  const { products } = useProducts();
+  const { brands } = useBrands();
+  const { categories } = useCategories();
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null)
+  const [filter, setFilter] = useState<filterOptions>({
+    brand: 'All',
+    category: 'All',
+    search: '',
+  });
+
+  const filteredProducts = useMemo(
+    () =>
+      products.filter((product: ProductType) => {
+        const brandMatch =
+          filter.brand === 'All' || product.brand.name.toLowerCase() === filter.brand.toLowerCase();
+        const categoryMatch =
+          filter.category === 'All' || product.category.name.toLowerCase() === filter.category.toLowerCase();
+        const searchMatch =
+          filter.search === '' ||
+          product.name.toLowerCase().includes(filter.search.toLowerCase()) ||
+          product.brand.name.toLowerCase().includes(filter.search.toLowerCase());
+        return brandMatch && categoryMatch && searchMatch;
+      }),
+    [products, filter]
+  );
+
+
+
+  return (
+    <>
+      <Banner />
+      <Container sx={styles.filterContainer} >
+        <FilterBar lable='brand' options={brands.map((brand: BrandType) => brand.name)} changeCallback={(value: string) => setFilter((prev) => ({ ...prev, brand: value }))}
+        />
+        <FilterBar
+          lable='category'
+          options={categories.map((category: CategoryType) => category.name)}
+          changeCallback={(value: string) => setFilter((prev) => ({ ...prev, category: value }))}
+        />
+        <SearchBar onSearch={(query: string) => setFilter((prev) => ({ ...prev, search: query }))}
+        />
+      </Container>
+      <Container sx={{ py: 6 }}>
+        <Grid container spacing={4} justifyContent="center">
+          <ProductsGrid products={filteredProducts} />
+        </Grid>
+      </Container>
+    </>
+  );
+};
+
+export default HomePage;
